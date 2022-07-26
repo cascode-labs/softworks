@@ -37,5 +37,3 @@ import an existing file to the cell view.
 
 
  Note: Need to add a picture of the import gui
- 57  
-README.rst
