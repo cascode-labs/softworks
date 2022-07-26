@@ -19,7 +19,7 @@ streamline documentation of IP libraries to improve team collaboration.
 | ppt         | *.pptx        | open office      | A power point presentation  |
 | Excel       | *.xlsx *.xlsm | open office      | A spreadsheet               |
 | html        | *.html        | firefox          | A web page                  |
-| module      | *.py *.pyc    | VS Code,         | A Python module             |
+| module      | *.py *.pyc    | VS Code, gedit   | A Python module             |
 | notebook    | *.ipynb       | VS Code, gedit   | A Python Jupyter notebook   |
 | markdown    | *.md          | VS Code, gedit   | A markdown document. VS code enables editing and rendering |
 | yaml        | *.yml         | VS Code, gedit   | A yaml data file            |
