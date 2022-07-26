@@ -4,9 +4,9 @@ Enables software-based circuit design flows in Cadence Virtuoso.  It also enable
 
 ## Overview
 
-Softworks intimately couples generator code or configuration with template schematic and symbol views of a circuit design.
-It allows code and software notebooks to be included in the Cadence Virtuoso database.  It supports both Python using
-the PyCharm IDE and SKILL using Cadence's built in SKILL IDE for editing.  It is based on the idea that a library can
+Softworks intimately couples circuit design code and configuration with template schematic and symbol views of a circuit design.
+It allows code, conifiguration, and documentation to be included in the Cadence Virtuoso database.  It supports both Python using
+the VS Code IDE and SKILL using Cadence's built in SKILL IDE for editing.  It is based on the idea that a library can
 simultaneously be a Cadence Library and a Python Package.  It also supports Markdown, pptx, xls, and pdf views to
 streamline documentation of IP libraries to improve team collaboration.
 
