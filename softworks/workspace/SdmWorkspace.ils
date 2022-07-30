@@ -1,0 +1,22 @@
+/*****************************************************************
+ *                                                               *
+ *    Softworks workspace initialization                         *
+ *                                                               *
+ *****************************************************************/
+SdmWorkspace = let(()
+
+procedure(init()
+	; create a new workspace based on the template unless it already exists
+	unless(isDir(strcat(pwd() "/softworks_workspace"))
+		printf("  Creating the softworks workspace...")
+		createDir("./softworks_workspace")
+		system("cp -rf $SOFTWORKS_ROOT/src/workspace/template/ ./softworks_workspace")
+		printf("done\n")
+		unless(isDir("./softworks_workspace")
+			warn("    Could not create softworks_workspace"))
+	)
+)
+
+list(nil
+	'init init
+))

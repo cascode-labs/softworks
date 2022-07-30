@@ -1,0 +1,11 @@
+// html (SdmHtml) 
+
+DataFormat html_df {
+	Pattern = *.html;
+	Preferred_Editor = firefox;
+	Default_Editor = firefox;
+	dfII_ViewType = html;
+	Co_Managed = master.tag data.dm, *.hml;
+}
+Tool firefox {  }
+

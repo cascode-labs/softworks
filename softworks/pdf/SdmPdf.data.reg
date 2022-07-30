@@ -1,0 +1,11 @@
+// PDF (SdmPDF) Data Registry (data.reg)
+
+DataFormat pdf_df {
+	Pattern = *.pdf;
+	Preferred_Editor = firefox_pdf;
+	Default_Editor = firefox_pdf;
+	dfII_ViewType = pdf_view;
+	Co_Managed = *.pdf master.tag data.dm;
+}
+Tool firefox_pdf {  }
+

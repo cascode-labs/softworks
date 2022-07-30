@@ -1,0 +1,52 @@
+// Python Data Registry (data.reg)
+//  Supports the Python module and Jupyter notebook custom cell views
+
+DataFormat module_df {
+	Pattern = *.py;
+	Preferred_Editor = vscode_module;
+	Default_Editor = vscode_module;
+	dfII_ViewType = module;
+	Co_Managed = *.py master.tag data.dm *.ipynb *.pyc;
+}
+Tool vscode_module {  }
+Tool gedit_module {  }
+
+
+DataFormat notebook_df {
+	Pattern = *.ipynb;
+	Preferred_Editor = vscode_notebook;
+	Default_Editor = vscode_notebook;
+	dfII_ViewType = notebook;
+	Co_Managed = *.ipynb master.tag data.dm *.py *.pyc;
+}
+Tool vscode_notebook {  }
+
+DataFormat yaml_df {
+	Pattern = *.yaml;
+	Preferred_Editor = vscode_yaml;
+	Default_Editor = vscode_yaml;
+	dfII_ViewType = yaml;
+	Co_Managed = *.yaml master.tag data.dm;
+}
+Tool vscode_yaml {  }
+Tool gedit_yaml {  }
+
+DataFormat markdown_df {
+	Pattern = *.md;
+	Preferred_Editor = vscode_markdown;
+	Default_Editor = vscode_markdown;
+	dfII_ViewType = markdown;
+	Co_Managed = *.md master.tag data.dm;
+}
+Tool vscode_markdown {  }
+Tool gedit_markdown {  }
+
+DataFormat toml_df {
+	Pattern = *.toml;
+	Preferred_Editor = vscode_toml;
+	Default_Editor = vscode_toml;
+	dfII_ViewType = toml;
+	Co_Managed = *.toml master.tag data.dm;
+}
+Tool vscode_toml {  }
+Tool gedit_toml {  }

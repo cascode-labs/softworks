@@ -1,0 +1,76 @@
+/*****************************************************************
+ *                                                               *
+ *    Handles opening views in the PyCharm Python IDE            *
+ *                                                               *
+ *****************************************************************/
+printf("  Loading Jupter Lab Support...")
+SdmJupyterLab =let(((URL nil))
+
+procedure(startJupyterLab(@rest restArgs)
+	if(restArgs then
+		system(sprintf(nil "jupyter-lab %s &" buildString(restArgs)))
+	else
+		system("jupyter-lab &"))
+)
+
+; Start a new PyCharm Session
+procedure(start() let((prj cmd)
+	if(PyCharmProcess then
+		printf("PyCharm is already running, please close the existing session first")
+	else
+		prj = SkyPrj->newFromEnv()
+		cmd = sprintf(nil "exec pycharm-start %s; exit" prj->Name)
+		printf("Starting PyCharm\n")
+		printf("PyCharm: %s\n" cmd)
+		PyCharmProcess = ipcBeginProcess(cmd "" 
+			outputCallback 
+			errorCallback
+			exitCallback)
+		printf("PyCharm: %A\n" PyCharmProcess)
+	)
+))
+
+procedure(stop()
+	when(PyCharmProcess
+		ipcKillProcess(PyCharmProcess)
+		PyCharmProcess = nil)
+)
+
+procedure(openFile(filePath)
+	if(PyCharmProcess then
+		printf("PyCharm: Opening %s" filePath)
+		cmd = sprintf(nil "exec pycharm-open %s; exit" filePath)
+		printf("PyCharm: %s\n" cmd)
+		openPid = ipcBeginProcess(cmd "" 
+			outputCallback 
+			errorCallback)
+	else
+		printf("PyCharm: Please start PyCharm first")
+	)
+)
+
+; Callback for PyCharm stdout
+procedure(outputCallback(o_childId t_data)
+	if(t_data == sprintf(nil "pycharm exited\n") then
+		stop()
+	else
+		printf("PyCharm: %s" t_data))
+)
+
+; Callback for PyCharm stderr
+procedure(errorCallback(o_childId t_data)
+	warn("PyCharm: %s" t_data))
+
+; Called when pyCharm exits
+procedure(exitCallback(o_childId x_exitStatus)
+	printf("PyCharm Exited")
+	PyCharmProcess = nil
+)
+
+list(nil
+	'start start
+	'stop stop
+	'openFile openFile
+))
+
+printf("done\n")

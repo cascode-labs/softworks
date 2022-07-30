@@ -1,0 +1,86 @@
+/*****************************************************************
+ *                                                               *
+ *    Softworks Software Data Manager SKILL Support Package      *
+ *     Supports both SKILL and SKILL++ views with different file *
+ *     extensions and templates.                                 *
+ *                                                               *
+ *****************************************************************/
+printf("  Loading Skill support...")
+
+SdmSkill = let((
+	(viewSetup '(
+	;(viewType  appName dataTrigger parentType)
+	("skill"   "skillIde"   "SdmSkillDataTrigger" nil) 
+	("skillpp" "skillppIde" "SdmSkillppDataTrigger" nil)
+	)))
+
+procedure(startIDE(@rest restArgs)
+	if(restArgs then
+		ilgRunSKILLIDE(?fileList restArgs) 
+	else
+		ilgRunSKILLIDE())
+)
+
+procedure(DataTrigger(@optional argList)
+	let((libName cellName file fileName extension objId viewFileName viewName viewType)	
+	;printf("Calling SkyVer  View App Trigger on %L !\n", argList);
+	libName = argList->libName
+	cellName = argList->cellName
+    viewName = argList->viewName
+    viewType = argList->viewType
+	rootType = argList->rootType
+   ;viewFileName = ddMapGetViewTypeFileName( rootType )
+	viewFileName = argList->viewFileId->name
+
+    if( objId = ddGetObj(libName cellName viewName viewFileName nil "r") then
+    	file = ddGetObjWritePath(objId)
+		;printf("filename = %s\n" fileName)
+		; Start Editor 
+		if(isFile(file) then
+			startIDE(file)
+		else
+			warn("Error opening %s / %s / %s", libName cellName viewName))
+	else
+		extension = case(viewType
+			("skill"   ".il")
+			("skillpp" ".ils")
+			(t ".ils")
+		)
+		templateName = strcat(viewType "Template" extension)
+		fileName = strcat(cellName extension)
+
+		if(objId = ddGetObj(libName cellName viewName fileName nil "w") then
+			file = ddGetObjWritePath(objId)
+			system(sprintf(nil "cp $SOFTWORKS_ROOT/src/skill/%s %s" templateName file))
+			ddReleaseObj(objId) 
+			startIDE(file)
+		else
+			warn("Could not create the cellview %s / %s / %s, File: %s", libName cellName viewName fileName))
+	)
+	t
+))
+
+; initialize the SdmSkill views
+procedure(init()
+	Sdm->initDeRegApp(viewSetup)
+)
+
+; uninitialize the SdmSkill views so they can be redefined
+procedure(uninit()
+	deUnRegApp("skill")
+	deUnRegApp("skillpp")
+)
+
+list(nil
+	'startIDE startIDE
+	'DataTrigger DataTrigger
+	'init init
+	'uninit uninit
+))
+
+;Global functions
+SdmStartSkillIde = SdmSkill->startIDE
+SdmSkillDataTrigger = SdmSkill->DataTrigger
+SdmSkillppDataTrigger = SdmSkill->DataTrigger
+
+printf("done\n")

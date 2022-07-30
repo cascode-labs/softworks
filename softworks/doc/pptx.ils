@@ -1,0 +1,294 @@
+; Opens a form for creating a pptx cellview.
+define(pptxNewFormCB nil)
+
+pptx = let(()
+
+procedure(pptxNewFormCBint(_MenuName Lib Cell _View _a _b)
+	pptxNewForm(Lib Cell)
+)
+
+
+
+; Creates a new pptx file
+procedure( pptxCreateNewCB(form)
+let((LibName CellName ViewName FileName viewFileObj overwrite cpSuccess fileSourceDescription)
+	
+	;unless(dbOpenCellViewByType(substring(form->libName->value 12 length(form->libName->value)-12)
+	;					substring(form->cellName->value 13 length(form->cellName->value)-13)
+	;					"logic_table" "logic_table" "r")
+		;dbOpenCellViewByType(substring(form->libName->value 12 length(form->libName->value)-12)
+							;substring(form->cellName->value 13 length(form->cellName->value)-13)
+							;"logic_table" "logic_table" "w")
+	;)
+	; create cell directory
+	LibName  = form->LibNameField->value
+	CellName = form->CellNameField->value
+	ViewName = form->ViewNameField->value
+	FileName = form->FileNameField->value
+	if((strcmp(substring(FileName -5) ".pptx") != 0)
+		FileName = strcat(FileName ".pptx")
+	)
+	viewFileObj = ddGetObj(LibName CellName ViewName FileName nil "r")
+	if( viewFileObj then
+		overwrite = hiDisplayAppDBox(?name 'OverwriteDBox
+									?dboxBanner "Overwrite Existing Cellview?"
+									?dboxText strcat("Do you want to overwrite the following existing cell view?\nLib: " LibName "\nCell: " CellName "\nView: " ViewName)
+		)
+		when(overwrite && ddNeedCheckout(viewFileObj)
+			ddCheckout(viewFileObj))
+	else
+		overwrite = t ;Cell doesn't exist yet
+	)
+	when(overwrite
+		;Create the view
+		viewFileObj=ddGetObj(LibName CellName ViewName FileName nil "w")
+		cpSuccess = case(form->ContentsOption->value 
+			("Blank Skyworks Template" 
+			 fileSourceDescription = "The blank Skyworks Slide Template"
+		 	 shell(strcat("cp -f " getShellEnvVar("SkyVerTemplatePath") "DesignTemplate.pptx " viewFileObj~>writePath)) ; Copy blank skyworks template presentation
+			)
+   
+			("Import Existing File"
+			 fileSourceDescription = sprintf(nil "imported from %s" form->FilePathField->value)
+			 shell(strcat("cp -f " pptxEscapeSpecialCharacters(form->FilePathField->value) " " viewFileObj~>writePath)) ; Import the selected presentation
+			)
+		) ; case
+		if(not(cpSuccess) then
+			error("The pptx file copy failed.")
+		else
+			printf("Created %s %s %s cell view %s" LibName CellName ViewName fileSourceDescription)
+		)
+	)
+	ddUpdateLibList() ; Update library list
+	hiSetCallbackStatus(form t)
+	hiFormUnmap(form)
+)
+)
+
+; Opens a form for creating a new pptx view
+procedure( pptxNewForm(LibSelected CellSelected "SS")
+let((SelectionL newForm) 
+	; LIB, CELL, VIEW SELECTION
+	SelectionL = tconc(SelectionL list(ddHiCreateLibraryComboField(
+		?name      'LibNameField
+		?prompt    "Library"
+		?defValue  LibSelected
+		?callback  "pptxLibSelectionCB(hiGetCurrentForm())"
+		?toolTip	   "Library Name"
+		?validationType	 'allowExisting
+	    	?editable  t)
+		5:10 400:30 60))
+	SelectionL = tconc(SelectionL list(ddHiCreateCellComboField(
+		?name      'CellNameField
+	    	?prompt    "Cell"
+	    	?defValue  CellSelected
+		?callback  "pptxCellSelectionCB(hiGetCurrentForm())"
+		?toolTip	   "Cell Name"
+		?validationType	 'allowAny
+	    	?editable  t)
+		5:50 400:30 60))
+	SelectionL = tconc(SelectionL list(ddHiCreateViewComboField(
+		?name      'ViewNameField
+	    	?prompt    "View"
+	    	?defValue  "pptx"
+		?callback  "pptxViewSelectionCB(hiGetCurrentForm())"
+		?toolTip	   "View Name"
+		?validationType	 'allowAny
+	    	?editable  t)
+		5:90 400:30 60))
+	;DutSelectionL = tconc(SelectionL list(hiCreateButton(
+	;	?name		'CellviewBrowseButton
+	;	?buttonText	"Browse"
+	;	?callback	"pptxBrowseCB(hiGetCurrentForm())")
+	;	410:90 100:30 60))
+
+	; OPTIONS
+	SelectionL = tconc(SelectionL list(hiCreateLabel(
+		?name      'optionsLabel
+		?labelText "Options"
+		?justification 'center)
+		5:130 510:30 60))
+	SelectionL = tconc(SelectionL list(hiCreateCyclicField(
+		?name      'ContentsOption
+		?choices	   '("Blank Skyworks Template" "Import Existing File")
+		?callback  'pptxUpdateFileContents
+		?prompt "File Contents")
+		5:170 510:30 100))
+
+	; FILE SELECTION
+	;SelectionL = tconc(SelectionL list(hiCreateLabel(
+	;	?name      'PptxLabelField
+	;	?labelText "Import PPTX File"
+	;	?justification 'center) 
+	;	5:0 510:30 60))
+	SelectionL = tconc(SelectionL list(hiCreateStringField(
+		?name      'FileNameField
+	    	?prompt    "File Name"
+		?callback  "pptxCheckPathCB(hiGetCurrentForm())"
+	    	?defValue  "Review.pptx"
+		?modifyCallback "pptxCheckFileName"
+	    	?editable  t) 
+		5:210 400:30 100))
+	SelectionL = tconc(SelectionL list(hiCreateStringField(
+		?name      'FilePathField
+	    	?prompt    "Import File Path"
+		?callback  "pptxCheckPathCB(hiGetCurrentForm())"
+	    	?defValue  strcat("/prj/" getShellEnvVar("PROJ_ID") "/doc/")
+		?enabled		nil
+		?invisible	t
+	    	?editable  t) 
+		5:250 400:30 100))
+	SelectionL = tconc(SelectionL list(hiCreateButton(
+		?name		'SelectFileButton
+		?buttonText	"Browse"
+		?enabled		nil
+		?invisible	t
+		?callback	"pptxSelectFileCB(hiGetCurrentForm())") 
+		410:250 100:30 60))
+	
+    ; CREATE FORM
+	formName = gensym('newPPTXForm)
+	newForm = hiCreateAppForm(
+		?name formName
+		?formTitle "New Power Point"
+		?fields car(SelectionL)
+		?buttonLayout 'OKCancelApply
+		?callback	'("pptxCreateNewCB(hiGetCurrentForm())")
+		?formType 'nonOptions
+		?unmapAfterCB t
+	)
+	putprop(formName "skyOpenSkyVerHelp()" 'hiHelpAction) 
+	hiInstantiateForm(newForm)
+	ddHiLinkFields(
+		newForm->LibNameField
+		newForm->CellNameField
+		newForm->ViewNameField
+	)
+	ddsSyncWithForm(newForm 'open 'LibNameField 'CellNameField 'ViewNameField)
+	hiDisplayForm( newForm )
+) ; let
+) ; procedure
+
+
+; Callback for selection of the library name
+procedure( pptxLibSelectionCB(_form)
+let( ()
+	;form = loadSTCform
+	;libN = form->LibNameField->value
+	;importSkillVar(hicBackground)
+	;hiHighlightField(form 'LibNameField hicBackground)
+	;when( libN != "" && ddGetObj(libN)
+	;hiHighlightField(form 'LibNameField hicBackground)
+	;)
+	ddsUpdateSyncWithForm()
+))
+
+; Callback for selection of the cell name
+procedure( pptxCellSelectionCB(_form)
+let( ()
+	;form = loadSTCform
+	;cellN = form->CellNameField->value
+	;importSkillVar(hicBackground)
+	;hiHighlightField(form 'DutCellNameField hicBackground)
+	;when( cellN != "" && ddGetObj(cellN)
+	;hiHighlightField(form 'DutCellNameField hicBackground)
+	;)
+	ddsUpdateSyncWithForm()
+))
+
+; Callback for selection of the view name
+procedure( pptxViewSelectionCB(_form)
+let( ()
+	;form = loadSTCform
+	;viewN = form->ViewNameField->value
+	;importSkillVar(hicBackground)
+	;hiHighlightField(form 'ViewNameField hicBackground)
+	;when( viewN != "" && ddGetObj(viewN)
+	;hiHighlightField(form 'ViewNameField hicBackground)
+	;)
+	ddsUpdateSyncWithForm()
+)
+)
+procedure( pptxBrowseCB(form)
+	ddsSyncWithForm(form 'BrowseButton 'LibNameField 'CellNameField 'ViewNameField)
+)
+procedure( pptxSelectedCB(form LibSelected CellSelected ViewSelected)
+	form->LibNameField->value = LibSelected
+	form->CellNameField->value = CellSelected
+	form->ViewNameField->value = ViewSelected
+)
+
+;;; checks if the PPTX file exists and makes sure it has a .pptx extension
+procedure( pptxCheckPathCB( theForm )
+   if( (strcmp(substring(theForm->FilePathField->value -5) ".pptx") &&
+	    isFile( theForm->FilePathField->value ) &&
+		!blankstrp(theForm->FilePathField->value) &&
+		!nindex(theForm->FilePathField->value " "))
+      then
+         ;println("File exists")
+         t
+      else
+         ;println("File Does Not Exist--Try Again")
+         nil
+      ) ;if
+   ) ; procedure
+; Callback for selecting the PPTX file.
+procedure(pptxSelectFileCB(form)
+let((file)
+	file = hiGetExistingFile(
+				?workingDir form->FilePathField->value
+				?filter "Power Point File (*.pptx);;All Files (*)"
+				?modal t)
+	if(file then
+	form->FilePathField->value = simplifyFilenameUnique(strcat(car(file) "/" cadr(file))))
+	form->FileNameField->value = cadr(file)
+)) ;procedure ssFormSelectStcFileCB
+;;; Updates the form according to the ContentsOption field
+procedure( pptxUpdateFileContents( theForm )
+   ;("Blank Skyworks Template" "Import Existing File")
+   case(theForm->ContentsOption->value 
+		(("Blank Skyworks Template") 
+		 theForm->SelectFileButton->enabled = nil
+		 theForm->SelectFileButton->invisible = 't
+		 theForm->FilePathField->enabled = nil
+		 theForm->FilePathField->invisible = 't)
+         
+		(("Import Existing File")
+		 theForm->SelectFileButton->enabled = 't
+		 theForm->SelectFileButton->invisible = nil
+		 theForm->FilePathField->enabled = 't
+		 theForm->FilePathField->invisible = nil)
+   ) ; case
+) ; procedure
+
+; Update the file name to work nicely with Unix
+procedure( pptxCheckFileName(_s_fieldName t_latestTextValue _g_sourceOfChange)
+let( (comPat1 comPat2 out)
+	; replaces spaces with underscores
+	comPat1 = pcreCompile( " " )
+	out = pcreReplace( comPat1 t_latestTextValue "_" 0 )
+	; Keeps the user from entering the following special characters: * / > < : [ ] | ( ) ; # @ ! $ ^ -
+	comPat2 = pcreCompile( "[\\*/><:&\\[\\]\\|();#@!\\$%\\^\\-]" )
+	pcreReplace( comPat2 out "" 0 )
+))
+
+procedure( pptxEscapeSpecialCharacters(t_fileName)
+let( (comPat1 comPat2 comPat3 out)
+	; escape spaces
+	comPat1 = pcreCompile( " " )
+	out = pcreReplace( comPat1 t_fileName "\\\\ " 0 )
+	; escape &
+	comPat2 = pcreCompile( "\\&" )
+	out = pcreReplace( comPat2 out "\\& " 0 )
+	; escape *
+	comPat3 = pcreCompile( "\\*" )
+	out = pcreReplace( comPat3 out "\\* " 0 )
+))
+
+; Export this function
+pptxNewFormCB = pptxNewFormCBint
+
+list(nil 
+	'pptxNewForm pptxNewForm
+	'pptxNewFormCB pptxNewFormCB)
+); class let

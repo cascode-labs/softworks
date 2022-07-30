@@ -1,0 +1,27 @@
+// This file contains definition of Docworks view types.
+
+DataFormat excel_view {
+	Pattern = *.xls*;
+	Default_Editor = rdsExcelEditor;
+	Co_Managed = master.tag data.dm *.xls*;
+	dfII_ViewType = excel_view;
+}
+  Tool rdsExcelEditor {  }
+
+DataFormat ppt {
+	Pattern = *.pptx;
+	Default_Editor = skyPPTEditor;
+	Co_Managed = master.tag data.dm *.pptx;
+	dfII_ViewType = ppt;
+}
+
+  Tool skyPPTEditor {  }
+
+DataFormat pdf {
+	Pattern = *.pdf;
+	Default_Editor = skyPDFEditor;
+	Co_Managed = master.tag data.dm *.pdf;
+	dfII_ViewType = pdf;
+}
+
+  Tool skyPDFEditor {  }

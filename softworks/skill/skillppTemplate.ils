@@ -1,0 +1,21 @@
+/*****************************************************************
+ *                                                               *
+ *    Template SKILL++ view                                      *
+ *                                                               *
+ *  Switch to the SKILL++ mode (toplevel environment)            *
+ *   toplevel('ils)                                              *
+ *  Package functions can be accessed in SKILL++ using           *
+ *   TmpPackage -> DoSomething(a)                                *
+ *                                                               *
+ *****************************************************************/
+printf("Loading TmpPackage\n")
+
+TmpPackage = let(()
+
+	procedure(DoSomething(a) let(()
+		nil
+	))
+
+list(nil
+	'DoSomething DoSomething
+))

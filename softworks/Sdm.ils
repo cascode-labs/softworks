@@ -1,0 +1,73 @@
+printf("  Loading Softworks core...")
+Sdm = let(()
+
+; A trigger that does nothing and is commonly used for the app and enable triggers.
+procedure(IdleTrigger(@optional argList)
+	;Do Nothing
+	t)
+
+; Open a view in the gedit text editor
+procedure(startGedit(@rest restArgs)
+	if(restArgs then
+		system(sprintf(nil "gedit %s &" buildString(restArgs)))
+	else
+		system("gedit &"))
+)
+
+procedure(deRegSdmApp(viewType appName dataTrigger @optional (parentType nil))
+	cond(
+	(member(viewType deGetAllViewTypes())
+		warn("Already defined the \"%s\" view type, need to run uninit before redefining it." viewType))
+	(dataTrigger
+		deRegApp( ; Primary type
+	    	?appName appName
+	    	?enableTrigger 'SdmIdleTrigger
+	    	?dataTrigger stringToSymbol(dataTrigger)
+	    	?viewType viewType
+			?appTrigger 'SdmIdleTrigger
+	    	?widgetType "none" 
+	  	)
+	)
+	(parentType ; subtype
+		deRegApp(
+	    	?appName appName
+	    	?enableTrigger 'SdmIdleTrigger
+	    	?parentType parentType
+	    	?viewType viewType
+	    	?widgetType "none" 
+	  	)
+	)
+	(t warn("Either the dataTrigger or parentType must be specified for view type" viewType)))
+)
+
+; Initialize All the custom cellviews contained in viewSetup
+;  viewSetup is a list with each element containing the definition for a view witht the form:
+;   list(viewType  appName dataTrigger parentType)
+procedure(initDeRegApp(viewSetup) let(((out t))
+	foreach(app viewSetup 
+			out = out && deRegSdmApp(car(app) cadr(app) caddr(app) cadddr(app))
+	)
+	out
+))
+
+; uninitialize all Python views so they can be redefined
+procedure(uninitDeRegApp(viewSetup) let(((out t))
+	foreach(view viewSetup
+		when(member(car(view) deGetAllViewTypes())
+			out = out && deUnRegApp(car(view)))
+	)
+	out
+))
+
+list(nil
+	'IdleTrigger IdleTrigger
+	'startGedit startGedit
+	'deRegSdmApp deRegSdmApp
+	'initDeRegApp initDeRegApp
+	'uninitDeRegApp uninitDeRegApp
+))
+
+; Global Functions
+SdmIdleTrigger = Sdm->IdleTrigger
+
+printf("done\n")

@@ -1,0 +1,20 @@
+// SKILL (SdmSkill) Data Registry (data.reg)
+//  Supports the skill and skillpp (skill++) custom cell views
+
+DataFormat skill_df {
+	Pattern = *.il;
+	Preferred_Editor = skillIde;
+	Default_Editor = skillIde;
+	dfII_ViewType = skill;
+	Co_Managed = master.tag data.dm *.ils;
+}
+Tool skillIde {  }
+
+DataFormat skillpp_df {
+	Pattern = *.ils;
+	Preferred_Editor = skillppIde;
+	Default_Editor = skillppIde;
+	dfII_ViewType = skillpp;
+	Co_Managed = master.tag data.dm *.il;
+}
+Tool skillppIde {  }

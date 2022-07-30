@@ -1,0 +1,52 @@
+ /*****************************************************************
+  *                                                               *
+  *              Docworks PowerPoint view support                 *
+  *                                                               *
+  *   Adds a "ppt" view type to Cadence Virtuoso                  *
+  *                                                               *
+  *****************************************************************/
+
+DocPPTX = let((
+	(viewSetup '(
+	;(viewType  appName dataTrigger parentType)
+	("ppt" "LibreOffice" "DocPPTXDataTrigger" nil) 
+	)))
+
+; Register PPTX Custom Cellview
+procedure(init() 
+	Sdm->initDeRegApp(viewSetup)
+)
+
+procedure(DataTrigger(@optional argList )
+let(( libName cellName file fileName libId objId filePath viewFileName viewName viewType INFILE )	
+;	printf("Calling SkyVer Power Point View Data Trigger on %L !\n", argList);
+	libName = argList->libName
+	cellName = argList->cellName
+        libId = argList->libId
+        viewName = argList->viewName
+        viewType = argList->viewType
+        viewFileName = ddMapGetViewTypeFileName( viewType )
+
+        if( objId = ddGetObj( libId~>name cellName viewName viewFileName nil "r") then
+        	file = ddGetObjWritePath( objId )
+			fileName = strcat(file "")
+			; Start text editor 
+			if(isFile(fileName) then
+				printf("libreoffice %s \n", fileName )
+				system( sprintf( nil "libreoffice %s &" fileName ))
+			else
+				warn("%s/%s/%s doesn't appear to be a ppt View !\nMissing the *.pptx file!\n", libName cellName viewName )
+			)
+		else
+			warn("ppt must be created outside Cadence tools !!\n")
+		)
+	t
+))
+
+list(nil
+	'init init
+	'DataTrigger DataTrigger
+))
+
+DocPPTXDataTrigger = DocPPTX->DataTrigger
+

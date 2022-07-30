@@ -1,0 +1,11 @@
+// PPTX (SdmPptx) 
+
+DataFormat pptx_df {
+	Pattern = *.pptx;
+	Preferred_Editor = libreoffice_pptx;
+	Default_Editor = libreoffice_pptx;
+	dfII_ViewType = pptx;
+	Co_Managed = *.pptx master.tag data.dm;
+}
+Tool libreoffice_pptx {  }
+

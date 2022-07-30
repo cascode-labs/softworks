@@ -1,0 +1,104 @@
+/*****************************************************************
+ *                                                               *
+ *    Softworks Software Data Manager Python Support Package     *
+ *                                                               *
+ *****************************************************************/
+printf("  Loading Python support...")
+
+SdmPy = let((
+	(viewSetup '(
+	;(viewType  appName dataTrigger parentType)
+	("module" "vscode_module" "SdmPyDataTrigger" nil) 
+		("module_gedit" "gedit_module" nil "module")
+	("notebook" "vscode_notebook" "SdmPyDataTrigger" nil)
+	("yaml" "vscode_yaml" "SdmPyDataTrigger" nil)
+		("yaml_gedit" "gedit_yaml" nil "yaml")
+	("toml" "vscode_toml" "SdmPyDataTrigger" nil)
+	("markdown" "vscode_markdown" "SdmPyDataTrigger" nil)
+		("markdown_gedit" "gedit_markdown" nil "yaml")
+	)))
+
+; Register All Python Custom Cellviews 
+procedure(init() let(((out t))
+	Sdm->initDeRegApp(viewSetup)
+))
+
+; uninitialize all Python views so they can be redefined
+procedure(uninit() let(((out t))
+	Sdm->uninitDeRegApp(viewSetup)
+))
+
+; Open a python view with the function specified by startReader
+;  startReader should start the editor with no arguments specified.
+;  startReader should open any number of views when specified as additional arguments.
+procedure(DataTrigger(@optional argList)
+	let((libName cellName viewName rootType appName viewFileName
+		   projectId userName userWorkspacePath file_workspace_link_path
+		   filePath fileName extension objId templateName)	
+	libName = argList->libName
+	cellName = argList->cellName
+  viewName = argList->viewName
+	rootType = argList->rootType
+	appName = argList->appName
+	viewFileName = argList->viewFileId->name
+
+	projectId = getShellEnvVar("PROJ_ID")
+  userName = getShellEnvVar("USER")
+
+  userWorkspacePath = strcat("/prj/" projectId "/work_libs/" userName)
+	; Open existing file through the workspace symbolic link or else the direct path
+  if( objId = ddGetObj(libName cellName viewName viewFileName nil "r") then
+		file_workspace_link_path = strcat(userWorkspacePath "/" libName "/" cellName "/" viewName "/" viewFileName)
+    filePath = ddGetObjWritePath(objId)
+		if(isFile(file_workspace_link_path) then
+		  startReader(appName file_workspace_link_path)
+		else if(isFile(filePath) then
+			startReader(appName filePath)
+		else
+			warn("Warning, couldn't open %s / %s / %s as a Python view", 
+			     libName cellName viewName)))
+	else
+		; Create a new file by copying a template
+		extension = case(rootType
+			("module"   ".py")
+			("notebook" ".ipynb")
+			("yaml"     ".yaml")
+      ("toml"     ".toml")
+			("markdown" ".md")
+			("rst" 		".rst")
+			(t 			".py") ; default
+		)
+		templateName = strcat(rootType "Template" extension)
+		fileName = strcat(cellName extension)
+		
+		if(objId = ddGetObj(libName cellName viewName fileName nil "w") then
+		  filePath = ddGetObjWritePath(objId)
+			system(sprintf(nil "cp $SOFTWORKS_ROOT/src/python/%s %s" templateName file))
+			startReader(appName filePath)
+		else
+			warn("Could not create the cellview file %s / %s / %s / %s" 
+			     libName cellName viewName fileName))
+	)
+	t
+))
+
+procedure(startReader(app filePath)
+	case(app
+
+		(("vscode_module" "vscode_notebook" "vscode_yaml" "vscode_markdown" "vscode_toml")
+			SdmVsCode->openFile(filePath))
+		(("gedit_module" "gedit_yaml" "gedit_markdown")
+			Sdm->startGedit(filePath))
+	)
+)
+
+list(nil
+	'init init
+	'uninit uninit
+	'DataTrigger DataTrigger
+))
+
+;Global functions
+SdmPyDataTrigger = SdmPy->DataTrigger
+
+printf("done\n")

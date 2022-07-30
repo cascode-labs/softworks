@@ -1,0 +1,77 @@
+/*****************************************************************
+ *                                                               *
+ *    Softworks Software Data Manager HTML Support Package     *
+ *                                                               *
+ *****************************************************************/
+printf("  Loading HTML support...")
+
+SdmHTML = let((
+	(viewSetup '(
+	;(viewType  appName dataTrigger parentType)
+	("html" "firefox" "SdmHTMLDataTrigger" nil) 
+	)))
+
+; Register All Python Custom Cellviews 
+procedure(init() let(((out t))
+	Sdm->initDeRegApp(viewSetup)
+))
+
+; uninitialize all Python views so they can be redefined
+procedure(uninit() let(((out t))
+	Sdm->uninitDeRegApp(viewSetup)
+))
+
+; Open an HTML view with the function specified by startReader
+;  startReader should start the editor with no arguments specified.
+;  startReader should open any number of views when specified as additional arguments.
+procedure(DataTrigger(@optional argList)
+	let((libName cellName file fileName extension objId viewFileName viewName viewType appName)	
+	libName = argList->libName
+	cellName = argList->cellName
+    viewName = argList->viewName
+	rootType = argList->rootType
+	appName = argList->appName
+	viewFileName = argList->viewFileId->name
+
+    if( objId = ddGetObj(libName cellName viewName viewFileName nil "r") then
+		; Open existing file
+    	file = ddGetObjWritePath(objId)
+		; Start editor 
+		if(isFile(file) then
+			startReader(appName file)
+		else
+			warn("Warning, couldn't open %s / %s / %s as a HTML view", libName cellName viewName))
+	else
+		SdmCombinedGUI(libName cellName viewName )
+		; Create a new file by copying a template
+		/*extension = case(rootType
+			("html"     ".html")
+			(t 			".html") ; default
+		)
+		templateName = strcat(rootType "Template" extension)
+		fileName = strcat(cellName extension)
+		
+		if(objId = ddGetObj(libName cellName viewName fileName nil "w") then
+			file = ddGetObjWritePath(objId)
+			system(sprintf(nil "cp $SOFTWORKS_ROOT/src/html/%s %s" templateName file))
+			startReader(appName file)
+		else
+			warn("Could not create the cellview file %s / %s / %s / %s" libName cellName viewName fileName))*/
+	)
+	t
+))
+
+procedure(startReader(app filePath)
+	system(strcat( "firefox " filePath))
+)
+
+list(nil
+	'init init
+	'uninit uninit
+	'DataTrigger DataTrigger
+))
+
+;Global functions
+SdmHTMLDataTrigger = SdmHTML->DataTrigger
+
+printf("done\n")

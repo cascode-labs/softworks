@@ -1,0 +1,67 @@
+/*****************************************************************
+ *                                                               *
+ *    Handles opening views in the Visual Studio Code IDE        *
+ *                                                               *
+ *****************************************************************/
+printf("  Loading VScode...")
+SdmVsCode =let(()
+
+; Start a new VS Code Session
+procedure(start() let((prj cmd)
+  prj = SkyPrj->newFromEnv()
+	cmd = sprintf(nil "exec code %s; exit" strcat(prj->PrjPath->Path "/work_libs/" prj->User "/" prj->Name "_code")) 
+	printf("Starting VScode\n")
+	printf("VScode: %s\n" cmd)
+	VScodeProcess = ipcBeginProcess(cmd "" 
+		outputCallback 
+		errorCallback)
+	printf("VScode: %A\n" VScodeProcess)
+))
+
+; Open a file in VScode
+procedure(openFile(filePath)
+		printf("VScode: Opening %s" filePath)
+		start()  ; Open or select the Code workspace window first
+		cmd = sprintf(nil "exec code %s; exit" filePath) ; update
+		printf("VScode: %s\n" cmd)
+		openPid = ipcBeginProcess(cmd "" 
+			outputCallback 
+			errorCallback)
+)
+
+; Callback for VScode stdout
+procedure(outputCallback(o_childId t_data)
+	if(t_data == sprintf(nil "VScode exited\n") then
+		stop()
+	else
+		printf("VScode: %s" t_data))
+)
+
+; Callback for VScode stderr
+procedure(errorCallback(o_childId t_data)
+	warn("VScode: %s" t_data))
+
+; Called when VScode exits
+procedure(exitCallback(o_childId x_exitStatus)
+	printf("VScode Exited")
+	VScodeProcess = nil
+)
+
+procedure(StartLmgrCB(_MenuName _Lib _Cell _View _a _b)
+	start())
+
+procedure(StopLmgrCB(_MenuName _Lib _Cell _View _a _b)
+	stop())
+
+list(nil
+	'start start
+	'openFile openFile
+	'StartLmgrCB StartLmgrCB
+	'StopLmgrCB StopLmgrCB
+))
+
+; Library Manager Menu Callbacks
+SdmVsCodeStartLmgrCB = SdmVsCode->StartLmgrCB
+
+printf("done\n")
+

@@ -1,0 +1,11 @@
+// XLSX (SdmXlsx) 
+
+DataFormat xlsx_df {
+	Pattern = *.xlsx;
+	Preferred_Editor = libreoffice_xlsx;
+	Default_Editor = libreoffice_xlsx;
+	dfII_ViewType = xlsx;
+	Co_Managed = master.tag data.dm *.xlsm;
+}
+Tool libreoffice_xlsx {  }
+

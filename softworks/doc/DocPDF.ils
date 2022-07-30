@@ -1,0 +1,53 @@
+ /*****************************************************************
+  *                                                               *
+  *              Docworks PDF view support                        *
+  *                                                               *
+  *   Adds a "pdf" view type to Cadence Virtuoso                  *
+  *                                                               *
+  *****************************************************************/
+printf("  Loading PDF support...")
+
+DocPDF = let((
+	(viewSetup '(
+	;(viewType  appName dataTrigger parentType)
+	("pdf" "Xpdf" "DocXpdfDataTrigger" nil) 
+	)))
+
+; Register All PDF Custom Cellviews 
+procedure(init() 
+	Sdm->initDeRegApp(viewSetup)
+)
+
+procedure(DataTrigger(@optional argList )
+	let(( libName cellName file fileName libId objId filePath viewFileName viewName viewType cmd)
+	; printf("Calling SkyVer Power Point View Data Trigger on %L !\n", argList);
+	libName = argList->libName
+	cellName = argList->cellName
+    viewName = argList->viewName
+    libId = argList->libId
+	rootType = argList->rootType
+	appName = argList->appName
+	viewFileName = argList->viewFileId->name
+	if( objId = ddGetObj( libId~>name cellName viewName viewFileName nil "r") then
+        file = ddGetObjWritePath( objId )
+		; Start xpdf editor
+		if(isFile(fileName) then
+			printf("xpdf %s \n", fileName )
+			system( sprintf( nil "xpdf %s &" fileName ))
+		else
+			warn("%s/%s/%s doesn't appear to be a pdf View !\nMissing the *.pdf file!\n", libName cellName viewName )
+		)
+	else
+		; TODO: Add a gui to import an existing PDF
+		Doc->NewFormCB(libName cellName viewName)
+	)
+	t
+))
+
+list(nil
+	'init init
+	'DataTrigger DataTrigger
+))
+
+;Global functions
+DocXpdfDataTrigger = DocPDF->DataTrigger

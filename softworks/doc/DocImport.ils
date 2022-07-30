@@ -1,0 +1,303 @@
+ /*****************************************************************
+  *                                                               *
+  *                Docworks Import Document Gui                   *
+  *                                                               *
+  *   The Gui for creating and importing documentation views     *
+  *                                                               *
+  *****************************************************************/
+DocNewGui = let(()
+
+; Imports an existing documentation file. (PPTX, PDF, Excel)  Main callback for the form.
+;procedure( importDocCB(o_field form g_item)
+procedure( importDocCB( form )
+let((LibName CellName ViewName FileName viewFileObj overwrite cpSuccess fileSourceDescription form)
+	if( form == nil then 
+		form = hiGetCurrentForm()
+	) ; if
+	LibName  = form->LibNameField->value
+	CellName = form->CellNameField->value
+	ViewName = form->ViewNameField->value
+	FileName = form->FileNameField->value
+
+	if(!CheckExtension(FileName)
+		error("The file %s does not have a supported file extension" FileName)
+	)
+	if( form->ImportNewDropdown->value == "Import" then
+		viewFileObj = ddGetObj(LibName CellName ViewName nil nil "r")
+		if( viewFileObj then
+			overwrite = hiDisplayAppDBox(
+				?name 'OverwriteDBox
+				?dboxBanner "Overwrite Existing Cellview?"
+				?dboxText strcat("Do you want to overwrite the following existing cell view?\nLib: " LibName "\nCell: " CellName "\nView: " ViewName)
+				)
+			when(overwrite && ddNeedCheckout(viewFileObj)
+				ddCheckout(viewFileObj))
+		else
+			overwrite = t ;Cell doesn't exist yet
+		) ;if
+		when(overwrite
+		;Create the view
+			viewFileObj=ddGetObj(LibName CellName ViewName FileName nil "w")
+			cpSuccess = fileSourceDescription = sprintf(nil "Imported from %s" form->FilePathField->value)
+			shell(strcat("cp -f " EscapeSpecialCharacters(form->FilePathField->value) " " viewFileObj~>writePath)) ; Import the selected file
+			if(not(cpSuccess) then
+				error("The file copy failed.  Could not copy from %s to %s" EscapeSpecialCharacters(form->FilePathField->value) viewFileObj~>writePath)
+			else
+				printf("Created %s %s %s cell view %s" LibName CellName ViewName fileSourceDescription)
+			) ; if
+		) ;when
+	else
+		viewFileObj=ddGetObj(LibName CellName ViewName FileName nil "w")
+		cpSuccess = fileSourceDescription = sprintf(nil "New cell created from %s" form->FilePathField->value)
+		case(form->ContentsOption->value 
+			(("Power Point (*.pptx)") 
+				;shell(strcat("cp -f " getShellEnvVar("SkyVerTemplatePath") "DesignTemplate.pptx " viewFileObj~>writePath))) ; Copy blank skyworks template presentation 
+				; system(sprintf(nil "cp $SOFTWORKS_ROOT/src/skill/%s %s" templateName file))
+				shell(strcat("cp -f $SOFTWORKS_ROOT/src/pptx/pptxTemplate.pptx " viewFileObj~>writePath)))
+			(("Excel Spreadsheet (*.xlsx)")
+				shell(strcat("cp -f $SOFTWORKS_ROOT/src/xlsx/xlsxTemplate.xlsx " viewFileObj~>writePath))) ; Copy blank Excel Worksheet
+			(("PDF (*.pdf)")
+				shell(strcat("cp -f $SOFTWORKS_ROOT/src/pdf/pdfTemplate.pdf " viewFileObj~>writePath))) ; Copy blank PDF presentation
+			(("HTML (*.html)")
+				shell(strcat("cp -f $SOFTWORKS_ROOT/src/html/htmlTemplate.html " viewFileObj~>writePath))) ; Copy blank HTML presentation
+		)
+		if(not(cpSuccess) then
+			error("The file copy failed.  Could not copy from %s to %s" EscapeSpecialCharacters(form->FilePathField->value) viewFileObj~>writePath)
+		else
+			printf("Created %s %s %s cell view %s" LibName CellName ViewName fileSourceDescription)
+		)
+	) ; if statement for import / new cell view 
+	ddUpdateLibList() ; Update library list
+	hiSetCallbackStatus(form t)
+	hiFormUnmap(form)
+)
+)
+
+; Choose between import or new cell
+procedure( CombinedGUI(LibSelected CellSelected ViewSelected "SSS")
+let((SelectionL newForm formName)
+	SelectionL = GUICellView(LibSelected CellSelected)
+    ; CREATE FORM
+	formName = gensym('importGUIDocForm)
+	newForm = hiCreateAppForm(
+		?name formName
+		?formTitle "Documentation Cell View"
+		?fields car(SelectionL)
+		?buttonLayout 'OKCancelApply
+		?callback	importDocCB
+;		?formType 'nonOptions
+		?unmapAfterCB t
+	)
+	putprop(formName "skyOpenSkyVerHelp()" 'hiHelpAction) 
+	hiInstantiateForm(newForm)
+	ddHiLinkFields(
+		newForm->LibNameField
+		newForm->CellNameField
+		newForm->ViewNameField
+	)
+	hiDisplayForm( newForm )
+))
+
+; Create basic GUI with button for import or new view 
+procedure( GUICellView(LibSelected CellSelected "SS")
+let((SelectionL newForm formName) 
+	; LIB, CELL, VIEW SELECTION
+	SelectionL = tconc(SelectionL list(ddHiCreateLibraryComboField(
+		?name       'LibNameField
+		?prompt     "Library"
+		?defValue    LibSelected
+		?toolTip	"Library Name"
+		?validationType	 'allowExisting
+	    ?editable  t)
+		5:10 400:30 60))
+	SelectionL = tconc(SelectionL list(ddHiCreateCellComboField(
+		?name      'CellNameField
+	    ?prompt    "Cell"
+	    ?defValue   CellSelected
+		?toolTip	"Cell Name"
+		?validationType	 'allowAny
+	    ?editable    t)
+		5:50 400:30 60))
+	SelectionL = tconc(SelectionL list(ddHiCreateViewComboField(
+		?name      'ViewNameField
+	    ?prompt    "View"
+	    ?defValue  "pptx"
+		?toolTip	   "View Name"
+		?validationType	 'allowAny
+	    ?editable   t)
+		5:90 400:30 60))
+	SelectionL = tconc(SelectionL list(hiCreateCyclicField(
+		?name      'ImportNewDropdown
+		?choices   '("Import" "New")
+		?prompt    "Type of Cell:"
+		?callback   changeViewToImport
+		?keepHistory t)
+		5:130 400:30 90))
+
+	; Import Cell View (Default)
+	SelectionL = tconc(SelectionL list(hiCreateFileSelectorField(
+		?name     'FilePathField
+		?mode     'existingFile
+		?prompt   "Import File Path"
+		?defValue  strcat("/prj/" getShellEnvVar("PROJ_ID") "/doc/")
+		?invisible nil 
+		?editable  t)
+		5:170 400:30 100))
+	SelectionL = tconc(SelectionL list(hiCreateStringField(
+		?name      'FileNameField
+	    ?prompt    "File Name"
+	    ?defValue  "Review.pptx"
+		?modifyCallback CheckFileName
+	    ?editable  t
+		?enabled   t) 
+		5:210 400:30 100))
+
+	; New Cell View 
+	SelectionL = tconc(SelectionL list(hiCreateCyclicField(
+		?name       'ContentsOption
+		?choices    '("Power Point (*.pptx)" "Excel Spreadsheet (*.xlsx)" "PDF (*.pdf)" "HTML (*.html)")
+		?callback   UpdateFileContents
+		?prompt     "File Type"
+		?invisible  t
+		?enabled   t
+		?keepHistory t)
+		5:170 400:30 100))
+
+	SelectionL
+))
+
+
+; Adjust GUI options for either New cell or Import cell formats
+procedure( changeViewToImport( o_field g_scope g_item )
+let(( )
+	if( (g_item == "New") 
+		then  
+			g_scope->FilePathField->invisible = t 
+			g_scope->ContentsOption->invisible = nil 
+			;hiUpdateFormBlock( g_scope )
+		else
+			g_scope->ContentsOption->invisible = t
+			g_scope->FilePathField->invisible = nil
+			;hiUpdateFormBlock( g_scope )
+;			hiChangeFormCallback( form newDocCB)
+	) ; if
+);let
+) ;procedure
+
+
+;;; checks if the file exists and makes sure it has a supported extension
+procedure( CheckPathCB( theForm )
+	if( (CheckExtension(theForm->FilePathField->value) &&
+	 	isFile( theForm->FilePathField->value ) &&
+		!blankstrp(theForm->FilePathField->value) &&
+		!nindex(theForm->FilePathField->value " "))
+	then
+		;println("File exists")
+		t
+	else
+		;println("File Does Not Exist--Try Again")
+		nil
+	) ;if
+) ; procedure
+
+; Callback for selecting the document file.
+procedure(SelectFileCB(_field scope)
+let((file)
+	file = hiGetExistingFile(
+				?workingDir scope->FilePathField->value
+				?filter "Document File (*.pptx *.pdf *.xlsx *.xlsm *.mdf *.txt *.html *.hml);;
+						 Power Point File (*.pptx);;
+						 PDF File (*.pdf);;
+						 Excel File (*.xlsx *.xlsm);;
+						 MTS File (*.mdf);;
+						 Text File (*.txt);;
+						 HTML File (*.html *.hml);;
+						 All Files (*)"
+				?modal t)
+	if(file then
+		if(CheckExtension(cadr(file)) then
+			scope->FilePathField->value = simplifyFilenameUnique(strcat(car(file) "/" cadr(file)))
+			scope->FileNameField->value = cadr(file)
+		else
+			error("The file %s does not have a supported file extension" cadr(file))	
+		)
+	)
+)) ;procedure ssFormSelectStcFileCB
+
+; Update the file name to work nicely with Unix
+procedure( CheckFileName(_field _scope t_latestTextValue _g_sourceOfChange)
+let( (comPat1 comPat2 out)
+	; replaces spaces with underscores
+	comPat1 = pcreCompile( " " )
+	out = pcreReplace( comPat1 t_latestTextValue "_" 0 )
+	; Keeps the user from entering the following special characters: * / > < : [ ] | ( ) ; # @ ! $ ^ -
+	comPat2 = pcreCompile( "[\\*/><:&\\[\\]\\|();#@!\\$%\\^\\-]" )
+	pcreReplace( comPat2 out "" 0 )
+))
+
+procedure( CheckExtension(file)
+	strcmp(substring(file -5) ".pptx") ||
+	strcmp(substring(file -4) ".pdf") ||
+	strcmp(substring(file -5) ".xlsx") ||
+	strcmp(substring(file -5) ".xlsm") ||
+	strcmp(substring(file -4) ".mdf") ||
+	strcmp(substring(file -4) ".txt") ||
+	strcmp(substring(file -4) ".hml") ||
+	strcmp(substring(file -5) ".html")
+)
+
+procedure( EscapeSpecialCharacters(t_fileName)
+let( (comPat1 comPat2 comPat3 out)
+	; escape spaces
+	comPat1 = pcreCompile( " " )
+	out = pcreReplace( comPat1 t_fileName "\\\\ " 0 )
+	; escape &
+	comPat2 = pcreCompile( "\\&" )
+	out = pcreReplace( comPat2 out "\\& " 0 )
+	; escape *
+	comPat3 = pcreCompile( "\\*" )
+	out = pcreReplace( comPat3 out "\\* " 0 )
+))
+
+; Changes FileNameField extension based on drop down menu
+procedure( UpdateFileContents(_field scope item)
+   case(item 
+		(("Power Point (*.pptx)") 
+		 scope->FileNameField->value = strcat(buildString(reverse(cdr(reverse(parseString(scope->FileNameField->value ".")))) "") ".pptx")
+		 scope->ViewNameField->value = "pptx")
+		(("Excel Spreadsheet (*.xlsx)")
+		 scope->FileNameField->value = strcat(buildString(reverse(cdr(reverse(parseString(scope->FileNameField->value ".")))) "") ".xlsx")
+		 scope->ViewNameField->value = "xlsx")
+		(("PDF (*.pdf)")
+		 scope->FileNameField->value = strcat(buildString(reverse(cdr(reverse(parseString(scope->FileNameField->value ".")))) "") ".pdf")
+		 scope->ViewNameField->value = "pdf")
+		(("HTML (*.html)")
+		 scope->FileNameField->value = strcat(buildString(reverse(cdr(reverse(parseString(scope->FileNameField->value ".")))) "") ".html")
+		 scope->ViewNameField->value = "html")
+   ) ; case
+) ; procedure
+
+procedure( CheckViewName(field scope)
+	if(lindex(list("schematic" "layout" "symbol" "adexl") field->value) then
+		case(scope->ContentsOption->value
+			(("Power Point (*.pptx)") 
+			 field->value = "review_pptx")
+			(("Excel Spreadsheet (*.xlsx)")
+			 field->value = "spreadsheet"))
+		t
+	else
+		t)
+)
+
+
+list(nil 
+	'GUICellView GUICellView
+	'CombinedGUI CombinedGUI
+	'changeViewToImport changeViewToImport
+	'UpdateFileContents UpdateFileContents
+))
+
+
+; Export these as global functions since the library manager init 
+;  file does not seem to support SKILL++ or the InScheme() function
+SdmCombinedGUI = DocNewGui->CombinedGUI

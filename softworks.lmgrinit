@@ -1,0 +1,34 @@
+/**********************************
+ * Softworks Library Manager Menu *
+ **********************************/
+println("Loading Softworks Menu")
+
+; VS code
+lmgrCreateMenuItem( "StartVsCode" "simple"
+   '(("label" "Start VS Code" )
+     ("callback" ("SdmVsCodeStartLmgrCB")) ))
+
+/*
+; Jupyter Lab
+lmgrCreateMenuItem( "JupyterSeparator" "separator" '())
+lmgrCreateMenuItem( "StartJupyter" "simple"
+   '(("label" "Start Jupyter" )
+     ("callback" ("SdmJupyterStartCB")) ))
+lmgrCreateMenuItem( "StopJupyter" "simple"
+   '(("label" "Stop Jupyter" )
+     ("callback" ("SdmJupyterStopCB")) ))
+
+; Documentation
+lmgrCreateMenuItem( "newDoc" "simple"
+	'(("label" "New Doc" )
+	  ("callback" ("DocNewFormCB")) ))
+lmgrCreateMenuItem( "importDoc" "simple"
+	'(("label" "Documentation" )
+	  ("callback" ("DocImportFormCB")) ))
+*/
+
+; Setup lib manager menu
+lmgrCreateMenu("SoftworksMenu" '(("label" "Softworks")))
+lmgrAddMenuItems("SoftworksMenu" "" '("StartVsCode"))
+lmgrAddMenuItems("menuBar" "L" '("SoftworksMenu"))
+println("  Done Loading Softworks Menu ")
