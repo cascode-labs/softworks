@@ -7,18 +7,13 @@ automated design of circuit IP and makes it accessible to average designer.
 It is an open-source library written in SKILL++ and built on the Virtue SKILL++ 
 framework.
 
-The software views make automated design more accessible to both thee average 
+The software views make automated design more accessible to both the average 
 IC design engineer and those with software experience.  It allows the 
 tool interface to be simplified to a simple template run script where the
 inputs are defined in a dictionary and passed to an API function. 
 
-The documentation views support the development of IP blocks.
-
-Softworks intimately couples analog generator code with template schematic and symbol views of a circuit design.
-It allows code and software notebooks to be included in the Cadence Virtuoso database.  It supports both Python using
-the PyCharm IDE and SKILL using Cadence's built in SKILL IDE for editing.  It is based on the idea that a library can
-simultaneously be a Cadence Library and a Python Package.  It also supports Markdown, pptx, xls, and pdf views to
-streamline documentation of IP libraries to improve team collaboration.
+The documentation views support the development of IP libraries by attaching
+the documentation directly to the cells.
 
 Cell View Types
 -----------------
