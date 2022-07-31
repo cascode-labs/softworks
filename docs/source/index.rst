@@ -14,6 +14,7 @@ Softworks
    :hidden:
 
    overview/index
+   view_types/index
    development/index
 
 Indices and tables

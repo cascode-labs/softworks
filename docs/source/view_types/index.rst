@@ -1,22 +1,9 @@
-Overview
-=========
+View Types
+==========
 
-Softworks defines cell view types for documentation and software views in 
-the Cadence Virtuoso integrated circuit design environment.  It is an 
-open-source library written in SKILL++ and built on the Virtue SKILL++ framework.
+Softworks enables custom view types
 
-
-is a library providing custom documentation and SKILL++ library providing 
-
-Enables software-based circuit design flows in Cadence Virtuoso.  It also enables documentation views.
-
-Softworks intimately couples analog generator code with template schematic and symbol views of a circuit design.
-It allows code and software notebooks to be included in the Cadence Virtuoso database.  It supports both Python using
-the PyCharm IDE and SKILL using Cadence's built in SKILL IDE for editing.  It is based on the idea that a library can
-simultaneously be a Cadence Library and a Python Package.  It also supports Markdown, pptx, xls, and pdf views to
-streamline documentation of IP libraries to improve team collaboration.
-
-Cell View Types
+Custom Cell Views
 -----------------
 
 +-------------+-----------------+-------------+------------------------------+
@@ -65,4 +52,6 @@ import an existing file to the cell view.
    :caption: Contents:
    :hidden:
 
-   release_notes
+   documentation_views
+   python_views
+   skill_views

@@ -2,7 +2,11 @@ Python Views
 ============
 
 `Python <https://www.python.org/>`_ views support the development of Python
-analog and RF generators.  Support for `Jupyter <https://jupyter.org/>`_
+code to automate the design and verification of circuits.  This can range 
+from simple run scripts for automating a portion of the design flow to full
+analog and RF generators.  
+
+Support for `Jupyter <https://jupyter.org/>`_
 notebooks is also included to support protoyping and run scripts.
 Markdown is included to easily prepare documentation.
 
