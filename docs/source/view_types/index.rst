@@ -37,17 +37,6 @@ Custom Cell Views
 |             |                 | gedit       |                              |
 +-------------+-----------------+-------------+------------------------------+
 
-Creating a New View
--------------------
-
-A new blank document view can be created by using the standard "File -> New -> Cell View..." selection.
-Then some view types will create a new cellview directly based on a template file while the
-documentation views will open a GUI.  This GUI has the option to either create the new cell view from a template or
-import an existing file to the cell view.
-
-..
-  Note: Need to add a picture of the import gui when it is ready
-
 .. toctree::
    :caption: Contents:
    :hidden:

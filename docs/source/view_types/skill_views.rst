@@ -1,7 +1,7 @@
 SKILL Views
 ============
 SKILL is Virtuoso's built-in scripting language based on the Franz LISP
-language.
+language.  SKILL and SKILL++ views will open using the SKILL IDE by default.
 
 +-------------+-----------------+-------------+------------------------------+
 | View Type   | Extensions      | Editors     | Description                  |
