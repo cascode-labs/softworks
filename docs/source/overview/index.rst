@@ -2,13 +2,17 @@ Overview
 =========
 
 Softworks defines cell view types for documentation and software views in 
-the Cadence Virtuoso integrated circuit design environment.  It is an 
-open-source library written in SKILL++ and built on the Virtue SKILL++ framework.
+the Cadence Virtuoso integrated circuit design environment.  It supports 
+automated design of circuit IP and makes it accessible to average designer.  
+It is an open-source library written in SKILL++ and built on the Virtue SKILL++ 
+framework.
 
+The software views make automated design more accessible to both thee average 
+IC design engineer and those with software experience.  It allows the 
+tool interface to be simplified to a simple template run script where the
+inputs are defined in a dictionary and passed to an API function. 
 
-is a library providing custom documentation and SKILL++ library providing 
-
-Enables software-based circuit design flows in Cadence Virtuoso.  It also enables documentation views.
+The documentation views support the development of IP blocks.
 
 Softworks intimately couples analog generator code with template schematic and symbol views of a circuit design.
 It allows code and software notebooks to be included in the Cadence Virtuoso database.  It supports both Python using
