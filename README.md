@@ -44,3 +44,21 @@ import an existing file to the cell view.
 ## License
 
 Softworks is MIT licensed, see the [LICENSE file](LICENSE) for more details.
+
+## Installation
+
+1. Make sure Virtuoso IC6.1.8 (though it may work with other IC6 versions) is installed
+2. Make sure the following programs are installed to support editing the associated views.
+   If one is not installed then you won't be able to edit that view type.
+   - Libre office (pptx, xlsx)
+     ```which libre```
+   - xpdf (PDF)
+     ```which xpdf```
+   - firefox (HTML)
+     ```which firefox```
+3. Install the [Virtue SKILL++ framework](https://github.com/cascode-labs/virtue)
+4. clone the softworks repo
+5. Load the Softworks.init.ils initialization script
+   - This can be loaded in the CIW window for a single session
+   - This can be done in your .cdsinit in the working directory for a single project
+   - This can be loaded by one of the site initialization scripts to load for all projects.
