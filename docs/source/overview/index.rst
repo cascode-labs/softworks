@@ -13,7 +13,8 @@ tool interface to be simplified to a simple template run script where the
 inputs are defined in a dictionary and passed to an API function. 
 
 The documentation views support the development of IP libraries by attaching
-the documentation directly to the cells.
+the documentation directly to the cells.  This makes it easier to communicate 
+the performance of the cell and keep track of it.
 
 Cell View Types
 -----------------
@@ -58,7 +59,7 @@ documentation views will open a GUI.  This GUI has the option to either create t
 import an existing file to the cell view.
 
 ..
-  Note: Need to add a picture of the import gui when it is ready
+  Note: Need to add a picture of the import gui
 
 .. toctree::
    :caption: Contents:
