@@ -4,13 +4,13 @@
  *                                                               *
  *  Switch to the SKILL++ mode (toplevel environment)            *
  *   toplevel('ils)                                              *
- *  Package functions can be accessed in SKILL++ using           *
- *   TmpPackage -> DoSomething(a)                                *
+ *  Module functions can be accessed in SKILL++ using           *
+ *   TmpModule -> DoSomething(a)                                *
  *                                                               *
  *****************************************************************/
-printf("Loading TmpPackage\n")
+printf("Loading TmpModule\n")
 
-TmpPackage = let(()
+TmpModule = let(()
 
 	procedure(DoSomething(a) let(()
 		nil

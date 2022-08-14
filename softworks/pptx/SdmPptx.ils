@@ -1,9 +1,7 @@
-/*****************************************************************
- *                                                               *
- *    Softworks Software Data Manager PPTX Support Package     *
- *                                                               *
- *****************************************************************/
 printf("  Loading PPTX support...")
+
+let(((module_description "Adds a PowerPoint (*.pptx) view type to Virtuoso")
+	 (Softworks Import['Softworks]))
 
 SdmPPTX = let((
 	(viewSetup '(
@@ -11,20 +9,25 @@ SdmPPTX = let((
 	("pptx" "libreoffice_pptx" "SdmPPTXDataTrigger" nil) 
 	)))
 
-; Register All PPTX Custom Cellviews 
-procedure(init() let(((out t))
-	Sdm->initDeRegApp(viewSetup)
+procedure(init() 
+"Register all PPTX Cellview Types "
+let(((out t))
+	Softworks->initDeRegApp(viewSetup)
 ))
 
-; uninitialize all PPTX views so they can be redefined
-procedure(uninit() let(((out t))
-	Sdm->uninitDeRegApp(viewSetup)
+procedure(uninit() 
+"uninitialize all PPTX views so they can be redefined"
+let(((out t))
+	Softworks->uninitDeRegApp(viewSetup)
 ))
 
 ; Open a PPTX view with the function specified by startReader
 ;  startReader should start the editor with no arguments specified.
 ;  startReader should open any number of views when specified as additional arguments.
 procedure(DataTrigger(@optional argList)
+    "Open a PPTX view with the function specified by startReader.
+	startReader should start the editor with no arguments specified and
+	open any number of views when specified as additional arguments."
 	let((libName cellName file fileName extension objId viewFileName viewName rootType templateName)	
 	libName = argList->libName
 	cellName = argList->cellName
@@ -42,31 +45,14 @@ procedure(DataTrigger(@optional argList)
 			warn("Warning, couldn't open %s / %s / %s as a PPTX view", libName cellName viewName))
 	else
 		SdmCombinedGUI(libName cellName viewName )
-		/*
-		 ;Create a new file by copying a template
-		extension = case(rootType
-			("pptx"     ".pptx")
-			(t 			".pptx") ; default
-		)
-		templateName = strcat(rootType "Template" extension)
-		fileName = strcat(cellName extension)
-		
-		if(objId = ddGetObj(libName cellName viewName fileName nil "w") then
-			file = ddGetObjWritePath(objId)
-			system(sprintf(nil "cp $SOFTWORKS_ROOT/src/pptx/%s %s" templateName file))
-			startReader(file)
-		else
-			warn("Could not create the cellview file %s / %s / %s / %s" libName cellName viewName fileName))
-*/
-		
 	)
 	t
 ))
 
 procedure(startReader(filePath)
+	"Opens a pptx file in Libre office."
 	system(strcat( "libreoffice --impress " filePath))
 )
-
 
 list(nil
 	'init init
@@ -74,7 +60,13 @@ list(nil
 	'DataTrigger DataTrigger
 ))
 
+Import['Module]->New('SdmPPTX SdmPPTX
+             ?project Softworks
+             ?description module_description)
+
+)
+
 ;Global functions
-SdmPPTXDataTrigger = SdmPPTX->DataTrigger
+SdmPPTXDataTrigger = Import['SdmPPTX]->DataTrigger
 
 printf("done\n")

@@ -1,6 +1,6 @@
 /*****************************************************************
  *                                                               *
- *    Softworks Software Data Manager Python Support Package     *
+ *    Softworks Software Data Manager Python Support Module     *
  *                                                               *
  *****************************************************************/
 printf("  Loading Python support...")
@@ -20,12 +20,12 @@ SdmPy = let((
 
 ; Register All Python Custom Cellviews 
 procedure(init() let(((out t))
-	Sdm->initDeRegApp(viewSetup)
+	Softworks->initDeRegApp(viewSetup)
 ))
 
 ; uninitialize all Python views so they can be redefined
 procedure(uninit() let(((out t))
-	Sdm->uninitDeRegApp(viewSetup)
+	Softworks->uninitDeRegApp(viewSetup)
 ))
 
 ; Open a python view with the function specified by startReader
@@ -88,7 +88,7 @@ procedure(startReader(app filePath)
 		(("vscode_module" "vscode_notebook" "vscode_yaml" "vscode_markdown" "vscode_toml")
 			SdmVsCode->openFile(filePath))
 		(("gedit_module" "gedit_yaml" "gedit_markdown")
-			Sdm->startGedit(filePath))
+			Softworks->startGedit(filePath))
 	)
 )
 

@@ -1,0 +1,6 @@
+{
+    "[skill]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
+    }
+}

@@ -1,6 +1,6 @@
 /*****************************************************************
  *                                                               *
- *    Softworks Software Data Manager SKILL Support Package      *
+ *    Softworks Software Data Manager SKILL Support Module      *
  *     Supports both SKILL and SKILL++ views with different file *
  *     extensions and templates.                                 *
  *                                                               *
@@ -62,7 +62,7 @@ procedure(DataTrigger(@optional argList)
 
 ; initialize the SdmSkill views
 procedure(init()
-	Sdm->initDeRegApp(viewSetup)
+	Softworks->initDeRegApp(viewSetup)
 )
 
 ; uninitialize the SdmSkill views so they can be redefined

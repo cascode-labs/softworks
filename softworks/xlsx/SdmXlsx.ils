@@ -1,6 +1,6 @@
 /*****************************************************************
  *                                                               *
- *    Softworks Software Data Manager XLSX Support Package     *
+ *    Softworks Software Data Manager XLSX Support Module     *
  *                                                               *
  *****************************************************************/
 printf("  Loading XLSX support...")
@@ -13,12 +13,12 @@ SdmXLSX = let((
 
 ; Register All XLSX Custom Cellviews 
 procedure(init() let(((out t))
-	Sdm->initDeRegApp(viewSetup)
+	Softworks->initDeRegApp(viewSetup)
 ))
 
 ; uninitialize all XLSX views so they can be redefined
 procedure(uninit() let(((out t))
-	Sdm->uninitDeRegApp(viewSetup)
+	Softworks->uninitDeRegApp(viewSetup)
 ))
 
 ; Open a XLSX view with the function specified by startReader

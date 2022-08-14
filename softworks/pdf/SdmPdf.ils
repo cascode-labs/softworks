@@ -15,12 +15,12 @@ SdmPDF = let((
 
 ; Register All PDF Custom Cellviews 
 procedure(init() let(((out t))
-	Sdm->initDeRegApp(viewSetup)
+	Softworks->initDeRegApp(viewSetup)
 ))
 
 ; Unregister Cellviews
 procedure(uninit() let(((out t))
-	Sdm->uninitDeRegApp(viewSetup)
+	Softworks->uninitDeRegApp(viewSetup)
 ))
 
 ; Open a pdf view with the function specified by startReader

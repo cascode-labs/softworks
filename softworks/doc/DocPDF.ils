@@ -1,11 +1,7 @@
- /*****************************************************************
-  *                                                               *
-  *              Docworks PDF view support                        *
-  *                                                               *
-  *   Adds a "pdf" view type to Cadence Virtuoso                  *
-  *                                                               *
-  *****************************************************************/
 printf("  Loading PDF support...")
+
+let(((module_description "Adds a PDF (*.pdf) view type to Virtuoso")
+	 (Softworks Import['Softworks]))
 
 DocPDF = let((
 	(viewSetup '(
@@ -13,9 +9,9 @@ DocPDF = let((
 	("pdf" "Xpdf" "DocXpdfDataTrigger" nil) 
 	)))
 
-; Register All PDF Custom Cellviews 
 procedure(init() 
-	Sdm->initDeRegApp(viewSetup)
+	"Register All PDF Custom Cellviews "
+	Softworks->initDeRegApp(viewSetup)
 )
 
 procedure(DataTrigger(@optional argList )
@@ -49,5 +45,11 @@ list(nil
 	'DataTrigger DataTrigger
 ))
 
+Import['Module]->New('DocPDF DocPDF
+             ?project Softworks
+             ?description module_description)
+
+)
+
 ;Global functions
-DocXpdfDataTrigger = DocPDF->DataTrigger
+DocXpdfDataTrigger = Import['DocPDF]->DataTrigger

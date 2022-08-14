@@ -1,16 +1,16 @@
-View Type Packages
+View Type Modules
 ==================
 Each view type package supports a view type or set of related view types in Cadence Virtuoso.
 Each folder under src/ is a view type package and must include the following.
 
-* **SKILL++ Packages**: Define the code for creating a new view and opening an existing view.
+* **SKILL++ Modules**: Define the code for creating a new view and opening an existing view.
 * **data.reg File**: Defines the view types in the Cadence data registry.
 * **File Templates**: A file for each veiw type which is copied when creating a new cell view
 * **Initialization Script**: An init.il or init.ils script
 * **Documentation**
 * **Conda Recipe**
 
-SKILL++ Packages
+SKILL++ Modules
 ----------------
 The code for creating a new view and opening an existing view is defined in one or more SKILL++ packages.
 A package general includes each of the following elements.  Each of the functions listed here must be a public function
@@ -40,7 +40,7 @@ following standard function definition:
 
   ; Register All Python Custom Cellviews
   procedure(init() let(((out t))
-    Sdm->initDeRegApp(viewSetup)
+    Softworks->initDeRegApp(viewSetup)
   ))
 
 uninit Function
@@ -52,7 +52,7 @@ following standard function definition:
 
   ; uninitialize all Python views so they can be redefined
   procedure(uninit() let(((out t))
-    Sdm->uninitDeRegApp(viewSetup)
+    Softworks->uninitDeRegApp(viewSetup)
   ))
 
 DataTrigger Function

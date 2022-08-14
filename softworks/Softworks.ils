@@ -1,5 +1,7 @@
 printf("  Loading Softworks core...")
-Sdm = let(()
+
+let(((module_description "Software and documentation view types in the Cadence Virtuoso IC design environment"))
+Softworks = let(()
 
 ; A trigger that does nothing and is commonly used for the app and enable triggers.
 procedure(IdleTrigger(@optional argList)
@@ -67,7 +69,12 @@ list(nil
 	'uninitDeRegApp uninitDeRegApp
 ))
 
+Softworks =Import['Module]->New('Softworks Softworks
+             ?description module_description)
+)
+Import['Project]->New(Softworks Import['Virtue]->GetCurrentFileDirectory())
+
 ; Global Functions
-SdmIdleTrigger = Sdm->IdleTrigger
+SdmIdleTrigger = Import['Softworks]->IdleTrigger
 
 printf("done\n")

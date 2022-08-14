@@ -1,44 +1,28 @@
 printf("Initializing Softworks\n")
-; Initialize the project skill source code using paths relative to this init script 
+let((dir_path src_path packages)
+	packages = '(
+		"Softworks.ils"
+		"/doc/SdmNewViewGUI.ils"
+		"/workspace/SdmWorkspace.ils"
+		"/python/SdmVsCode.ils"
+		"/python/SdmPy.ils"
+		"/skill/SdmSkill.ils"
+		"/pdf/SdmPdf.ils"
+		"/pptx/SdmPptx.ils"
+		"/xlsx/SdmXlsx.ils"
+		"/html/SdmHtml.ils"
+		"/code_workspace.il" ; Create Code Workspace
+	)
+	Import['Module]->LoadList(packages
+		?root_path strcat(Import['Virtue]->GetCurrentFileDirectory() "/softworks"))
 
-let((file_path dir_path src_path)
-	; Get the filepath and dir path of the current skill script
-	file_path = simplifyFilename(get_filename(piport))
-	dir_path = buildString(reverse(cdr(reverse(parseString(file_path "/")))) "/")
-
-	; source code location
-	src_path = strcat("/" dir_path "/src")
-	
-	; Load the source code and initialized
-	loadi(strcat(src_path "/Sdm.ils")) ; Common library
-	; GUI
-	loadi(strcat(src_path "/doc/SdmNewViewGUI.ils"))
-	; Workspace
-	loadi(strcat(src_path "/workspace/SdmWorkspace.ils"))
 	SdmWorkspace->init()
-	; Python
-	loadi(strcat(src_path "/python/SdmVsCode.ils"))
-	loadi(strcat(src_path "/python/SdmPy.ils"))
 	SdmPy->init()
-	; SKILL
-	loadi(strcat(src_path "/skill/SdmSkill.ils"))
 	SdmSkill->init()
-	; PDF
-	loadi(strcat(src_path "/pdf/SdmPdf.ils"))
 	SdmPDF->init()
-	; PPTX
-	loadi(strcat(src_path "/pptx/SdmPptx.ils"))
 	SdmPPTX->init()
-	; XLSX
-	loadi(strcat(src_path "/xlsx/SdmXlsx.ils"))
 	SdmXLSX->init()
-	; HTML
-	loadi(strcat(src_path "/html/SdmHtml.ils"))
 	SdmHTML->init()
-
-	; Create Code Workspace
-	loadi(strcat(src_path "/code_workspace.il"))
-
 )
 
 printf("  Softworks Initialized\n")

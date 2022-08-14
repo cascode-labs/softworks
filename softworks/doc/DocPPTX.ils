@@ -14,7 +14,7 @@ DocPPTX = let((
 
 ; Register PPTX Custom Cellview
 procedure(init() 
-	Sdm->initDeRegApp(viewSetup)
+	Softworks->initDeRegApp(viewSetup)
 )
 
 procedure(DataTrigger(@optional argList )
