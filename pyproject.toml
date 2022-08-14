@@ -12,7 +12,7 @@ maintainers = [
 ]
 readme = "README.md"
 license = {file="LICENSE"}
-requires-python = ">=3.8"
+requires-python = ">=3.7"
 classifiers = [
    "Programming Language :: Python :: 3 :: Only",
    "Programming Language :: Python :: 3.8",
@@ -40,9 +40,9 @@ keywords = [
 dynamic = ["version", "description"]
 
 [project.urls]
-"Home" = "http://www.cascode-labs.org/virtue/"
-"Documentation" = "http://www.cascode-labs.org/virtue/"
-"Source" = "https://github.com/cascode-labs/virtue"
+"Home" = "http://www.cascode-labs.org/softworks/"
+"Documentation" = "http://www.cascode-labs.org/softworks/"
+"Source" = "https://github.com/cascode-labs/softworks"
 
 [tool.flit.module]
 name = "softworks"
