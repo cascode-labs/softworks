@@ -26,7 +26,7 @@ def get_version(relative_path):
         return version_file.read().strip()
 
 # The full version, including alpha/beta/rc tags
-release = get_version("../../version")
+release = get_version("../../softworks/version")
 
 
 # -- General configuration ---------------------------------------------------
@@ -38,6 +38,8 @@ extensions = [
     'sphinx_copybutton',
     'sphinx_panels',
     "sphinx_github_changelog",
+    'sphinx_sitemap',
+    'sphinx.ext.autosectionlabel',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -48,6 +50,7 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+language = "en"
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -73,6 +76,12 @@ html_theme_options = {
             "icon": "fab fa-github-square",
             # The type of image to be used (see below for details)
             "type": "fontawesome",
+        },
+        {
+            "name": "Latest-release",
+            "url": "https://github.com/cascode-labs/softworks/releases/latest",  # required
+            "icon": "fas fa-tag",
+            "type": "fontawesome",
         }
     ],
     "external_links": [
@@ -81,4 +90,20 @@ html_theme_options = {
     "logo": {
         "text": "Softworks",
     },
+    "footer_items": ["version", "copyright", "sphinx-version"],
+    "use_edit_page_button": True,
 }
+
+html_context = {
+    "github_url": "https://github.com",
+    "github_user": "cascode-labs",
+    "github_repo": "softworks",
+    "github_version": "main",
+    "doc_path": "docs",
+}
+
+html_baseurl = 'http://www.cascode-labs.org/softworks/'
+
+html_css_files = [
+    'css/custom.css',
+]

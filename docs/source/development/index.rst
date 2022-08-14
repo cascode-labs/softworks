@@ -1,6 +1,6 @@
 Development
 ===========
-Developers of softworks can clone the repository from the `softworks Github repo <https://github.com/skyworksinc/Softworks>`.
+Developers of softworks can clone the repository from the `softworks Github repo <https://github.com/cascode-labs/softworks>`.
 
 Development Setup
 -----------------
@@ -16,17 +16,17 @@ development environment updated with the new version before the updates will tak
 
 Conda Package
 -------------
-Softworks is built into a conda package for distribution.  The conda package uses IDS-skill
-to setup the Virtuoso environment.  Please see http://idshost/IDS-skill/index.html for further details.
+Softworks is built into a conda package for distribution on `conda-forge <https://conda-forge.org/#page-top>`_.
+The Conda recipe can be found in the softworks-feedstock
 
 Release Methodology
 -------------------
-Softworks uses the IDS common release methodology.
 
-Details: http://idshost/Development.html
+softworks should be released on Github.  When a new release is published on 
+Github then a workflow will build and publish softworks to PyPi.  Then the 
+release on PyPi will trigger an update to the conda package.
 
 .. toctree::
-   :caption: Contents:
    :hidden:
 
    view_type_packages
