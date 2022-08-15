@@ -14,7 +14,7 @@ let((dir_path src_path packages)
 		"/code_workspace.il" ; Create Code Workspace
 	)
 	Import['Module]->LoadList(packages
-		?root_path strcat(Import['Virtue]->GetCurrentFileDirectory() "/softworks"))
+		?root_path Import['Virtue]->GetCurrentFileDirectory())
 
 	SdmWorkspace->init()
 	SdmPy->init()
