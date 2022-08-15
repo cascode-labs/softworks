@@ -33,8 +33,8 @@ VS Code IDE
 views.  It supports all the included Python view types.  Many of the views require extensions to be installed.  Before opening VS Code, it can be started from the
 Softworks menu in the library manager to open the code workspace of the current project.
 
-Gedit Text Editor
------------------
+Gedit Python Editor
+--------------------
 `Gedit <https://help.gnome.org/users/gedit/stable/>`_ is included as another
 option for editing Python views.  It is just a relatively simple text editor.
 It is not as powerful as PyCharm but opens much faster than

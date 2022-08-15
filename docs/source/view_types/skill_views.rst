@@ -19,8 +19,8 @@ Virtuoso has a built in SKILL IDE which is the default editor for SKILL
 views.  However it does take a Cadence SKILL development license and only a
 limited number of licenses are available.
 
-Gedit Text Editor
------------------
+Gedit SKILL Text Editor
+------------------------
 `Gedit <https://help.gnome.org/users/gedit/stable/>`_ is included as another
 editor option.  It is just a text editor and is not as powerful as the SKILL IDE.
 However it doesn't require a license.
