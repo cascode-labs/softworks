@@ -13,6 +13,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath( '../..'))
+import softworks
 
 # -- Project information -----------------------------------------------------
 
@@ -20,13 +21,10 @@ project = 'Softworks'
 copyright = '2022, Curtis Mayberry'
 author = 'Curtis Mayberry'
 
-def get_version(relative_path):
-    here = os.path.abspath(os.path.dirname(__file__))
-    with open(os.path.join(here, relative_path), 'r') as version_file:
-        return version_file.read().strip()
-
 # The full version, including alpha/beta/rc tags
-release = get_version("../../softworks/version")
+release = softworks.__version__
+print('Release version={num}'.format(num=release))
+version = release
 
 
 # -- General configuration ---------------------------------------------------
