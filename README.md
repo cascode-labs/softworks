@@ -1,5 +1,11 @@
 # Softworks
 
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/cascode-labs/softworks?include_prereleases)
+![Conda](https://img.shields.io/conda/v/conda-forge/softworks?label=conda-forge)
+![PyPI](https://img.shields.io/pypi/v/softworks)
+![GitHub issues](https://img.shields.io/github/issues/cascode-labs/softworks)
+![PyPI - License](https://img.shields.io/pypi/l/softworks)
+
 Software and documentation view types in the Cadence Virtuoso IC design environment.
 
 ## Overview
