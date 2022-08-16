@@ -4,6 +4,9 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "softworks"
+dependencies = [
+   "virtue-skill >= 0.3, < 1",
+]
 authors = [
    {name="Curtis Mayberry", email="Curtisma3@gmail.com"},
 ]
@@ -49,3 +52,21 @@ softworks = "softworks.virtue_softworks"
 
 [tool.flit.module]
 name = "softworks"
+
+[project.optional-dependencies]
+optional = ["skillbridge"]
+test = [
+    "pytest >=7.1.2",
+    "pylint >= 2.14.4",
+    "mypy >= 0.961",
+]
+dev = ["pre-commit == 2.20.0"]
+doc = [
+   "sphinx == 4.5.0",
+   "pydata-sphinx-theme == 0.9.0",
+   "sphinx-panels == 0.6.0",
+   "sphinx_copybutton == 0.5.0",
+   "sphinx-autobuild == 2021.3.14",
+   "sphinx-github-changelog == 1.2.0",
+   "sphinx-sitemap == 2.2.0",
+]
