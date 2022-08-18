@@ -1,0 +1,16 @@
+---
+# A yaml document must start with three dashes as shown above
+# A quick tutorial: learnxinyminutes.com/docs/yaml/
+# Example yaml entries
+
+# Comment
+stringExample: Example
+stringExample2: "Example2"
+stringExample3: 'Example3'
+integerExample: 100
+integerHexExample: 0x64
+integerBinartExample: 0b1100100
+floatingNumberExample: 100.0
+floatingScientificExample: 1e+2
+booleanExample: true
+
