@@ -1,11 +1,9 @@
-/*****************************************************************
- *                                                               *
- *    Softworks Software Data Manager Python Support Module     *
- *                                                               *
- *****************************************************************/
 printf("  Loading Python support...")
 
-SdmPy = let((
+let((Python
+	   (Softworks Import['Softworks]))
+
+Python = let((
 	(viewSetup '(
 	;(viewType  appName dataTrigger parentType)
 	("module" "vscode_module" "SdmPyDataTrigger" nil) 
@@ -84,7 +82,6 @@ procedure(DataTrigger(@optional argList)
 
 procedure(startReader(app filePath)
 	case(app
-
 		(("vscode_module" "vscode_notebook" "vscode_yaml" "vscode_markdown" "vscode_toml")
 			SdmVsCode->openFile(filePath))
 		(("gedit_module" "gedit_yaml" "gedit_markdown")
@@ -98,7 +95,12 @@ list(nil
 	'DataTrigger DataTrigger
 ))
 
+putprop(Softworks Python 'Python)
+Python->init()
+
+)
+
 ;Global functions
-SdmPyDataTrigger = SdmPy->DataTrigger
+SdmPyDataTrigger = Import['Softworks]->Python->DataTrigger
 
 printf("done\n")

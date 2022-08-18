@@ -1,0 +1,45 @@
+let((CodeWorkspace)
+
+CodeWorkspace = let(((Path Import['Path]))
+
+procedure(workspace_directory()
+	cond(
+		(getShellEnvVar("SOFTWORKS_WORKSPACE_PATH")
+		  getShellEnvVar("SOFTWORKS_WORKSPACE_PATH"))
+		((getShellEnvVar("VIPER_PRJ_PATH")
+		  && getShellEnvVar("PROJ_ID"))
+		  Path->Cat(getShellEnvVar("VIPER_PRJ_PATH") 
+							  "work_libs" getShellEnvVar("USER") 
+								strcat(getShellEnvVar("PROJ_ID") "_code")))
+		(getShellEnvVar("PROJ_ID")
+		  Path->Cat("/prj" getShellEnvVar("PROJ_ID") 
+							  "work_libs" getShellEnvVar("USER")))
+		('t 
+			Path->Cat(pwd() "softworks_workspace"))
+	)
+)
+
+procedure(init()
+  let((executableWithArgs)
+	; create a new workspace based on the template unless it already exists
+	unless(isDir(workspace_directory())
+		printf("  Creating the softworks workspace...")
+		createDirHier(workspace_directory())
+
+		executableWithArgs = sprintf(nil 
+			"python -m softworks.workspace.code_workspace %s %s" 
+			getShellEnvVar("PRJ_ID") getShellEnvVar("USER"))
+		system(executableWithArgs)
+		printf("done\n")
+		unless(isDir("./softworks_workspace")
+			warn("    Could not create softworks_workspace"))
+	)
+))
+
+list(nil
+	'init init
+))
+
+CodeWorkspace->init()
+
+)

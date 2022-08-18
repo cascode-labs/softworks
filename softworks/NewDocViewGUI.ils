@@ -1,11 +1,6 @@
- /*****************************************************************
-  *                                                               *
-  *                Docworks Import Document Gui                   *
-  *                                                               *
-  *   The Gui for creating and importing documentation views     *
-  *                                                               *
-  *****************************************************************/
-SdmNewViewGUI = let(()
+let((NewDocViewGUI
+	   (module_description "The Gui for creating and importing documentation views"))
+NewDocViewGUI = let(()
 
 ; Imports an existing documentation file. (PPTX, PDF, Excel)  Main callback for the form.
 ;procedure( importDocCB(o_field form g_item)
@@ -242,7 +237,10 @@ list(nil
 	'CombinedGUI CombinedGUI
 ))
 
+putprop(Import['Softworks] NewDocViewGUI 'NewDocViewGUI)
+
+)
 
 ; Export these as global functions since the library manager init 
 ;  file does not seem to support SKILL++ or the InScheme() function
-SdmCombinedGUI = SdmNewViewGUI->CombinedGUI
+SdmCombinedGUI = Import['Softworks]->NewDocViewGUI->CombinedGUI

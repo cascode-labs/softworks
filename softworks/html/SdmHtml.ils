@@ -1,9 +1,10 @@
 printf("  Loading HTML support...")
 
-let(((module_description "Adds an HTML (*.html) view type to Virtuoso")
-	 (Softworks Import['Softworks]))
+let((HTML
+	   (module_description "Adds an HTML (*.html) view type to Virtuoso")
+	   (Softworks Import['Softworks]))
 
-SdmHTML = let((
+HTML = let((
 	(viewSetup '(
 	;(viewType  appName dataTrigger parentType)
 	("html" "firefox" "SdmHTMLDataTrigger" nil) 
@@ -42,20 +43,6 @@ procedure(DataTrigger(@optional argList)
 			warn("Warning, couldn't open %s / %s / %s as a HTML view", libName cellName viewName))
 	else
 		SdmCombinedGUI(libName cellName viewName )
-		; Create a new file by copying a template
-		/*extension = case(rootType
-			("html"     ".html")
-			(t 			".html") ; default
-		)
-		templateName = strcat(rootType "Template" extension)
-		fileName = strcat(cellName extension)
-		
-		if(objId = ddGetObj(libName cellName viewName fileName nil "w") then
-			file = ddGetObjWritePath(objId)
-			system(sprintf(nil "cp $SOFTWORKS_ROOT/src/html/%s %s" templateName file))
-			startReader(appName file)
-		else
-			warn("Could not create the cellview file %s / %s / %s / %s" libName cellName viewName fileName))*/
 	)
 	t
 ))
@@ -70,14 +57,13 @@ list(nil
 	'DataTrigger DataTrigger
 ))
 
-Import['Module]->New('SdmHTML SdmHTML
-             ?project Softworks
-             ?description module_description)
+putprop(Softworks HTML 'HTML)
+HTML->init()
 
 )
 
 
 ;Global functions
-SdmHTMLDataTrigger = Import['SdmHTML]->DataTrigger
+SdmHTMLDataTrigger = Import['Softworks]->HTML->DataTrigger
 
 printf("done\n")

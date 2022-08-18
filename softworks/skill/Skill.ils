@@ -1,13 +1,8 @@
-/*****************************************************************
- *                                                               *
- *    Softworks Software Data Manager SKILL Support Module      *
- *     Supports both SKILL and SKILL++ views with different file *
- *     extensions and templates.                                 *
- *                                                               *
- *****************************************************************/
 printf("  Loading Skill support...")
+let((Skill
+	  (Softworks Import['Softworks]))
 
-SdmSkill = let((
+Skill = let((
 	(viewSetup '(
 	;(viewType  appName dataTrigger parentType)
 	("skill"   "skillIde"   "SdmSkillDataTrigger" nil) 
@@ -77,10 +72,14 @@ list(nil
 	'init init
 	'uninit uninit
 ))
+putprop(Import['Softworks] Skill 'Skill)
+Skill->init()
+
+)
 
 ;Global functions
-SdmStartSkillIde = SdmSkill->startIDE
-SdmSkillDataTrigger = SdmSkill->DataTrigger
-SdmSkillppDataTrigger = SdmSkill->DataTrigger
+SdmStartSkillIde = Import['Softworks]->Skill->startIDE
+SdmSkillDataTrigger = Import['Softworks]->Skill->DataTrigger
+SdmSkillppDataTrigger = Import['Softworks]->Skill->DataTrigger
 
 printf("done\n")

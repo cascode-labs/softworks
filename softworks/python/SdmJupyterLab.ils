@@ -1,8 +1,3 @@
-/*****************************************************************
- *                                                               *
- *    Handles opening views in the PyCharm Python IDE            *
- *                                                               *
- *****************************************************************/
 printf("  Loading Jupter Lab Support...")
 SdmJupyterLab =let(((URL nil))
 

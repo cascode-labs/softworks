@@ -1,13 +1,16 @@
-/*****************************************************************
- *                                                               *
- *    Handles opening views in the Visual Studio Code IDE        *
- *                                                               *
- *****************************************************************/
-printf("  Loading VScode...")
-SdmVsCode =let(()
+printf("  Loading VScode support...")
+let((VsCode)
+
+VsCode =let(()
 
 ; Start a new VS Code Session
-procedure(start() let((prj cmd)
+procedure(start() let((workspace_prefix cmd)
+	if(getShellEnvVar("SOFTWORKS_WORKSPACE_PATH") then
+		workspace_path = getShellEnvVar("SOFTWORKS_WORKSPACE_PATH")
+	else
+		workspace_prefix = strcat(pwd() "/code_workspace") 
+	)
+	workspace_prefix
   prj = SkyPrj->newFromEnv()
 	cmd = sprintf(nil "exec code %s; exit" strcat(prj->PrjPath->Path "/work_libs/" prj->User "/" prj->Name "_code")) 
 	printf("Starting VScode\n")
@@ -60,8 +63,12 @@ list(nil
 	'StopLmgrCB StopLmgrCB
 ))
 
+putprop(Import['Softworks] VsCode 'VsCode)
+
+)
+
 ; Library Manager Menu Callbacks
-SdmVsCodeStartLmgrCB = SdmVsCode->StartLmgrCB
+SdmVsCodeStartLmgrCB = Import['Softworks]->VsCode->StartLmgrCB
 
 printf("done\n")
 

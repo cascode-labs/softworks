@@ -1,9 +1,10 @@
 printf("  Loading PPTX support...")
 
-let(((module_description "Adds a PowerPoint (*.pptx) view type to Virtuoso")
-	 (Softworks Import['Softworks]))
+let((PPTX
+	   (module_description "Adds a PowerPoint (*.pptx) view type to Virtuoso")
+	   (Softworks Import['Softworks]))
 
-SdmPPTX = let((
+PPTX = let((
 	(viewSetup '(
 	;(viewType  appName dataTrigger parentType)
 	("pptx" "libreoffice_pptx" "SdmPPTXDataTrigger" nil) 
@@ -60,13 +61,12 @@ list(nil
 	'DataTrigger DataTrigger
 ))
 
-Import['Module]->New('SdmPPTX SdmPPTX
-             ?project Softworks
-             ?description module_description)
+putprop(Softworks PPTX 'PPTX)
+PPTX->init()
 
 )
 
 ;Global functions
-SdmPPTXDataTrigger = Import['SdmPPTX]->DataTrigger
+SdmPPTXDataTrigger = Import['Softworks]->PPTX->DataTrigger
 
 printf("done\n")

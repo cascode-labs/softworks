@@ -1,13 +1,9 @@
- /*****************************************************************
-  *                                                               *
-  *              Softworks PDF view support                        *
-  *                                                               *
-  *   Adds a "pdf" view type to Cadence Virtuoso                  *
-  *                                                               *
-  *****************************************************************/
-printf("  Loading PDF support...")
 
-SdmPDF = let((
+printf("  Loading PDF support...")
+let((PDF
+	(Softworks Import['Softworks]))
+	
+PDF = let((
 	(viewSetup '(
 	;(viewType  appName dataTrigger parentType)
 	("pdf_view" "firefox_pdf" "SdmPdfDataTrigger" nil) 
@@ -47,19 +43,6 @@ procedure(DataTrigger(@optional argList )
 	else
 		; Create a new file by copying a template
 		SdmCombinedGUI(libName cellName viewName )
-		/*extension = case(rootType
-			("pdf"   ".pdf")
-			(t 		 ".pdf") ; default
-		)
-		templateName = strcat(rootType "Template" extension)
-		fileName = strcat(cellName extension)
-		
-		if(objId = ddGetObj(libName cellName viewName fileName nil "w") then
-			file = ddGetObjWritePath(objId)
-			system(sprintf(nil "cp $SOFTWORKS_ROOT/src/pdf/%s %s" templateName file))
-			startReader(appName file)
-		else
-			warn("Could not create the cellview file %s / %s / %s / %s" libName cellName viewName fileName))*/
 	)
 	t
 ))
@@ -74,7 +57,12 @@ list(nil
 	'DataTrigger DataTrigger
 ))
 
+putprop(Softworks PDF 'PDF)
+PDF->init()
+
+)
+
 ;Global functions
-SdmPdfDataTrigger = SdmPDF->DataTrigger
+SdmPdfDataTrigger = Import['Softworks]->PDF->DataTrigger
 
 printf("done\n")

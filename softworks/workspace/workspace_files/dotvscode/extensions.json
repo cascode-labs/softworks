@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "hediet.vscode-drawio",
+        "ms-vscode-remote.vscode-remote-extensionpack",
+        "herbertagosto.skill",
+        "janisdd.vscode-edit-csv",
+        "grapecity.gc-excelviewer",
+        "mhutchie.git-graph",
+        "cschleiden.vscode-github-actions",
+        "github.vscode-pull-request-github",
+        "ms-toolsai.jupyter",
+        "redhat.vscode-yaml"
+    ]
+}
