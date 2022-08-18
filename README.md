@@ -1,4 +1,4 @@
-![Views supported by Softworks](docs/source/_static/logo/softworks_logo_named.jpg)
+# Softworks
 
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/cascode-labs/softworks?include_prereleases)](https://github.com/cascode-labs/softworks/releases/latest)
 [![Conda](https://img.shields.io/conda/v/conda-forge/softworks?label=conda-forge)](https://anaconda.org/conda-forge/softworks)
