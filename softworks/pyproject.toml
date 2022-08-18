@@ -1,0 +1,72 @@
+[build-system]
+requires = ["flit_core>=3.2"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "softworks"
+dependencies = [
+   "virtue-skill >= 0.3, < 1",
+]
+authors = [
+   {name="Curtis Mayberry", email="Curtisma3@gmail.com"},
+]
+maintainers = [
+   {name="Curtis Mayberry", email="Curtisma3@gmail.com"},
+]
+readme = "README.md"
+license = {file="LICENSE"}
+requires-python = ">=3.7"
+classifiers = [
+   "Programming Language :: Python :: 3 :: Only",
+   "Programming Language :: Python :: 3.8",
+   "Programming Language :: Python :: 3.9",
+   "Programming Language :: Python :: 3.10",
+   "Programming Language :: Other Scripting Engines",
+   "Programming Language :: Other",
+   "License :: OSI Approved :: MIT License",
+   "Operating System :: POSIX :: Linux",
+   "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+   "Topic :: Scientific/Engineering",
+   "Topic :: Software Development",
+   "Topic :: Software Development :: Libraries",
+   "Topic :: Software Development :: Libraries :: Python Modules",
+   "Development Status :: 3 - Alpha",
+]
+keywords = [
+   "circuit design",
+   "design automation",
+   "Cadence",
+   "virtuoso",
+   "SKILL",
+   "Python"
+]
+dynamic = ["version", "description"]
+
+[project.urls]
+"Home" = "http://www.cascode-labs.org/softworks/"
+"Documentation" = "http://www.cascode-labs.org/softworks/"
+"Source" = "https://github.com/cascode-labs/softworks"
+
+[project.entry-points."virtue"]
+softworks = "softworks.virtue_softworks"
+
+[tool.flit.module]
+name = "softworks"
+
+[project.optional-dependencies]
+optional = ["skillbridge"]
+test = [
+    "pytest >=7.1.2",
+    "pylint >= 2.14.4",
+    "mypy >= 0.961",
+]
+dev = ["pre-commit == 2.20.0"]
+doc = [
+   "sphinx == 4.5.0",
+   "pydata-sphinx-theme == 0.9.0",
+   "sphinx-panels == 0.6.0",
+   "sphinx_copybutton == 0.5.0",
+   "sphinx-autobuild == 2021.3.14",
+   "sphinx-github-changelog == 1.2.0",
+   "sphinx-sitemap == 2.2.0",
+]
