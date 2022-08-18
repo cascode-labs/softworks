@@ -12,9 +12,10 @@ Software and documentation view types in the Cadence Virtuoso IC design environm
 
 Softworks defines cell view types for documentation and software views in
 the Cadence Virtuoso integrated circuit design environment.  It supports
-automated design of circuit IP and makes it accessible to average designer.  
+automated design of circuit IP and makes it accessible to the average designer.  
 
-It is an open-source library written in SKILL++ and built on the Virtue SKILL and Python design automation framework.
+It is an open-source library written in SKILL++ and built on the
+[Virtue SKILL and Python design automation framework](http://www.cascode-labs.org/virtue/).
 
 ![Views supported by Softworks](docs/source/_static/view_list.png)
 

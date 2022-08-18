@@ -1,11 +1,31 @@
 Overview
 =========
 
+.. image:: https://img.shields.io/github/v/release/cascode-labs/softworks?include_prereleases
+   :alt: GitHub release (latest by date including pre-releases)
+   :target: https://github.com/cascode-labs/softworks/releases/latest
+.. image:: https://img.shields.io/conda/v/conda-forge/softworks?label=conda-forge
+   :alt: Conda
+   :target: https://anaconda.org/conda-forge/softworks
+.. image:: https://img.shields.io/pypi/v/softworks
+   :alt: PyPI
+   :target: https://pypi.org/project/softworks/
+.. image:: https://img.shields.io/github/issues/cascode-labs/softworks
+   :alt: GitHub issues
+   :target: https://github.com/cascode-labs/softworks/issues
+.. image:: https://img.shields.io/pypi/l/softworks
+   :alt: PyPI - License
+   :target: https://choosealicense.com/licenses/mit/
+
 Softworks defines cell view types for documentation and software views in 
 the Cadence Virtuoso integrated circuit design environment.  It supports 
 automated design of circuit IP and makes it accessible to average designer.  
 It is an open-source library written in SKILL++ and built on the Virtue SKILL++ 
 framework.
+
+.. image:: ../../../docs/source/_static/view_list.png
+  :alt: Views supported by Softworks
+
 
 The software views make automated design more accessible to both the average 
 IC design engineer and those with software experience.  It allows the 
@@ -58,8 +78,9 @@ Then some view types will create a new cellview directly based on a template fil
 documentation views will open a GUI.  This GUI has the option to either create the new cell view from a template or
 import an existing file to the cell view.
 
-..
-  Note: Need to add a picture of the import gui
+.. image:: ../../../docs/source/_static/new_doc_gui.png
+  :alt: Views supported by Softworks
+
 
 .. toctree::
    :caption: Contents:
