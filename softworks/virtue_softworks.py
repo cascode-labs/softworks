@@ -5,23 +5,6 @@ import virtue
 import softworks
 
 
-@virtue.hookimpl
-def virtue_python_package_name() -> str:
-    return "softworks"
-
-@virtue.hookimpl
-def virtue_skill_package_name() -> str:
-    return "Softworks"
-
-@virtue.hookimpl
-def virtue_skill_initialization_paths() -> Tuple[Path]:
-    return (files(softworks) / "softworks.cdsinit.ils"),
-
-@virtue.hookimpl
-def virtue_cdslibmgr_paths() -> Tuple[Path]:
-    return (files(softworks) / "softworks.cdsLibMgr.il"),
-
-@virtue.hookimpl
 def virtue_data_reg_paths() -> Tuple[Path]:
     return (
         files(softworks) / "python" / "SdmPy.data.reg",
@@ -31,3 +14,16 @@ def virtue_data_reg_paths() -> Tuple[Path]:
         files(softworks) / "pdf" / "SdmPdf.data.reg",
         files(softworks) / "html" / "SdmHtml.data.reg",
         )
+
+@virtue.hookimpl
+def virtue_register_skill_package():
+    return {
+        "python_package_name": "softworks",
+        "skill_package_name": "Softworks",
+        "cdsinit_paths": (files(softworks) / "softworks.cdsinit.ils"),
+        "cdslibmgr_paths": (files(softworks) / "softworks.cdsLibMgr.il"),
+        "cds_dev_libraries": {
+            "virtue_dev_project": (files(virtue) / "softworks_dev_work"),
+        },
+        "data_reg_paths": virtue_data_reg_paths(),
+    }
