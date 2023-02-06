@@ -58,16 +58,19 @@ Softworks is MIT licensed, see the [LICENSE file](LICENSE) for more details.
 
 ## Installation
 
-1. Make sure Virtuoso IC6.1.8 (though it may work with other IC6 versions) 
+1. Make sure Virtuoso IC6.1.8 (though it may work with other IC6 versions)
    is installed
-2. Make sure the following programs are installed to support editing the 
-   associated views.
+2. Make sure the following programs are installed to support editing the
+   associated views:
+   - Visual Studio Code / vscode
+     ```which code```
    - Libre office (pptx, xlsx)
      ```which libre```
    - xpdf (PDF)
      ```which xpdf```
    - firefox (HTML)
      ```which firefox```
+
 3. Install by following
   [Virtue framework installation instructions](https://www.cascode-labs.org/virtue/overview/install.html#).  
 
