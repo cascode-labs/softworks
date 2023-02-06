@@ -32,7 +32,7 @@ procedure(DataTrigger(@optional argList)
 	let((libName cellName file fileName extension objId viewFileName viewName rootType templateName)	
 	libName = argList->libName
 	cellName = argList->cellName
-    viewName = argList->viewName
+  viewName = argList->viewName
 	rootType = argList->rootType
 	viewFileName = argList->viewFileId->name
 

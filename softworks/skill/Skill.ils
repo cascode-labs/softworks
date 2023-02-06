@@ -17,7 +17,7 @@ procedure(startIDE(@rest restArgs)
 )
 
 procedure(DataTrigger(@optional argList)
-	let((libName cellName file fileName extension objId viewFileName viewName viewType)	
+	let((libName cellName file fileName extension objId viewFileName viewName viewType softworks_root_path)	
 	;printf("Calling SkyVer  View App Trigger on %L !\n", argList);
 	libName = argList->libName
 	cellName = argList->cellName
@@ -46,7 +46,8 @@ procedure(DataTrigger(@optional argList)
 
 		if(objId = ddGetObj(libName cellName viewName fileName nil "w") then
 			file = ddGetObjWritePath(objId)
-			system(sprintf(nil "cp $SOFTWORKS_ROOT/src/skill/%s %s" templateName file))
+      softworks_root_path = Import['Package]->GetPackageMetadata(Import['Softworks])['project_root_path]
+			system(sprintf(nil "cp %s/skill/%s %s" softworks_root_path templateName file))
 			ddReleaseObj(objId) 
 			startIDE(file)
 		else

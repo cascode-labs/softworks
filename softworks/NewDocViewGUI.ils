@@ -71,7 +71,7 @@ let((LibName CellName ViewName FileName viewFileObj overwrite cpSuccess fileSour
 ; Choose between import or new cell
 procedure( CombinedGUI(LibSelected CellSelected ViewSelected "SSS")
 let((SelectionL newForm formName)
-	SelectionL = GUICellView(LibSelected CellSelected)
+	SelectionL = GUICellView(LibSelected CellSelected ViewSelected)
     ; CREATE FORM
 	formName = gensym('importGUIDocForm)
 	newForm = hiCreateAppForm(
@@ -94,8 +94,8 @@ let((SelectionL newForm formName)
 ))
 
 ; Create basic GUI with button for import or new view 
-procedure( GUICellView(LibSelected CellSelected "SS")
-let((SelectionL newForm formName) 
+procedure( GUICellView(LibSelected CellSelected ViewSelected "SSS")
+  let((SelectionL newForm formName) 
 	; LIB, CELL, VIEW SELECTION
 	SelectionL = tconc(SelectionL list(ddHiCreateLibraryComboField(
 		?name       'LibNameField
@@ -116,7 +116,7 @@ let((SelectionL newForm formName)
 	SelectionL = tconc(SelectionL list(ddHiCreateViewComboField(
 		?name      'ViewNameField
 	    ?prompt    "View"
-	    ?defValue  "pptx"
+	    ?defValue  ViewSelected
 		?toolTip	   "View Name"
 		?validationType	 'allowAny
 	    ?editable   t)
@@ -135,15 +135,16 @@ let((SelectionL newForm formName)
 		?mode     'existingFile
 		?prompt   "Import File Path"
 		?defValue  strcat("/prj/" getShellEnvVar("PROJ_ID") "/doc/")
-		?invisible nil 
+		?invisible nil
+    ?modifyCallback UpdateFilenameFromImportSelection
 		?editable  t)
 		5:170 400:30 100))
 	SelectionL = tconc(SelectionL list(hiCreateStringField(
 		?name      'FileNameField
-	    ?prompt    "File Name"
-	    ?defValue  "Review.pptx"
+	  ?prompt    "File Name"
+	  ?defValue  "Review.pptx"
 		?modifyCallback CheckFileName
-	    ?editable  t
+	  ?editable  t
 		?enabled   t) 
 		5:210 400:30 100))
 
@@ -181,13 +182,19 @@ let(( )
 
 ; Update the file name to work nicely with Unix
 procedure( CheckFileName(_field _scope t_latestTextValue _g_sourceOfChange)
-let( (comPat1 comPat2 out)
+let( (comPat1 comPat2  comPat2 out)
 	; replaces spaces with underscores
 	comPat1 = pcreCompile( " " )
 	out = pcreReplace( comPat1 t_latestTextValue "_" 0 )
 	; Keeps the user from entering the following special characters: * / > < : [ ] | ( ) ; # @ ! $ ^ -
-	comPat2 = pcreCompile( "[\\*/><:&\\[\\]\\|();#@!\\$%\\^\\-]" )
-	pcreReplace( comPat2 out "" 0 )
+	;comPat2 = pcreCompile( "[\\*/><:&\\[\\]\\|();#@!\\$%\\^\\-]" )
+	;pcreReplace( comPat2 out "" 0 )
+	; Only allow alphanumeric characters, "."" and "_"
+	comPat2 = pcreCompile( "[^A-Z^a-z^0-9^_^\\.]+" )
+	out = pcreReplace( comPat2 out "" 0 )
+  comPat3 = pcreCompile( "[\\^]" )
+	out = pcreReplace( comPat3 out "" 0 )
+  out
 ))
 
 procedure( CheckExtension(file)
@@ -232,6 +239,10 @@ procedure( UpdateFileContents(_field scope item)
    ) ; case
 ) ; procedure
 
+procedure(UpdateFilenameFromImportSelection( field scope latestTextValue sourceOfChange)
+  scope->FileNameField->value = CheckFileName(nil nil Import['Path]->FileName(latestTextValue) nil)
+  't
+)
 
 list(nil 
 	'CombinedGUI CombinedGUI

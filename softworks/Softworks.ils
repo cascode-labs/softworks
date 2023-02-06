@@ -71,10 +71,11 @@ list(nil
 	'uninitDeRegApp uninitDeRegApp
 ))
 
-Softworks = Import['Module]->New('Softworks Softworks
+Softworks = Import['Module]->New('Softworks 
+              ?module Softworks
               ?description module_description)
 
-Import['Project]->New(Softworks Import['Virtue]->GetCurrentFileDirectory())
+Import['Package]->New(Softworks Import['Virtue]->GetCurrentFileDirectory())
 )
 ; Global Functions
 SdmIdleTrigger = Import['Softworks]->IdleTrigger

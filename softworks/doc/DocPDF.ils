@@ -46,7 +46,7 @@ list(nil
 ))
 
 Import['Module]->New('DocPDF DocPDF
-             ?project Softworks
+             ?package Softworks
              ?description module_description)
 
 )

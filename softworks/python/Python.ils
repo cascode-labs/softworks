@@ -32,7 +32,7 @@ procedure(uninit() let(((out t))
 procedure(DataTrigger(@optional argList)
 	let((libName cellName viewName rootType appName viewFileName
 		   projectId userName userWorkspacePath file_workspace_link_path
-		   filePath fileName extension objId templateName)	
+		   filePath fileName extension objId templateName softworks_root_path)	
 	libName = argList->libName
 	cellName = argList->cellName
   viewName = argList->viewName
@@ -71,7 +71,8 @@ procedure(DataTrigger(@optional argList)
 		
 		if(objId = ddGetObj(libName cellName viewName fileName nil "w") then
 		  filePath = ddGetObjWritePath(objId)
-			system(sprintf(nil "cp $SOFTWORKS_ROOT/src/python/%s %s" templateName file))
+      softworks_root_path = Import['Package]->GetPackageMetadata(Import['Softworks])['project_root_path]
+			system(sprintf(nil "cp %s/python/%s %s" softworks_root_path templateName filePath))
 			startReader(appName filePath)
 		else
 			warn("Could not create the cellview file %s / %s / %s / %s" 
@@ -83,7 +84,7 @@ procedure(DataTrigger(@optional argList)
 procedure(startReader(app filePath)
 	case(app
 		(("vscode_module" "vscode_notebook" "vscode_yaml" "vscode_markdown" "vscode_toml")
-			SdmVsCode->openFile(filePath))
+		Import['Softworks]['VsCode]->openFile(filePath))
 		(("gedit_module" "gedit_yaml" "gedit_markdown")
 			Softworks->startGedit(filePath))
 	)
