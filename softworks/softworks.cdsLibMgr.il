@@ -1,4 +1,4 @@
-println("  Adding Softworks Menu")
+printf("  Adding Softworks Menu\n")
 
 lmgrCreateMenuItem( "StartVsCode" "simple"
    '(("label" "Start VS Code" )
@@ -7,4 +7,4 @@ lmgrCreateMenuItem( "StartVsCode" "simple"
 lmgrCreateMenu("SoftworksMenu" '(("label" "Softworks")))
 lmgrInsertMenuItems("VirtueHelpMenu" "" '("StartVsCode"))
 
-println("  Done adding softworks menu ")
+printf("  Done adding softworks menu\n")
