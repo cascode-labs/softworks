@@ -1,0 +1,6 @@
+SOFTINCLUDE $SOFTWORKS_ROOT/pptx/SdmPptx.data.reg;
+SOFTINCLUDE $SOFTWORKS_ROOT/xlsx/SdmXlsx.data.reg;
+SOFTINCLUDE $SOFTWORKS_ROOT/pdf/SdmPdf.data.reg;
+SOFTINCLUDE $SOFTWORKS_ROOT/python/SdmPy.data.reg;
+SOFTINCLUDE $SOFTWORKS_ROOT/skill/SdmSkill.data.reg;
+SOFTINCLUDE $SOFTWORKS_ROOT/html/SdmHtml.data.reg;
