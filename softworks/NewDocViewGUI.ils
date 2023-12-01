@@ -240,7 +240,7 @@ procedure( UpdateFileContents(_field scope item)
 ) ; procedure
 
 procedure(UpdateFilenameFromImportSelection( field scope latestTextValue sourceOfChange)
-  scope->FileNameField->value = CheckFileName(nil nil Import['Path]->FileName(latestTextValue) nil)
+  scope->FileNameField->value = CheckFileName(nil nil VrtImport['Path]->FileName(latestTextValue) nil)
   't
 )
 
@@ -248,10 +248,10 @@ list(nil
 	'CombinedGUI CombinedGUI
 ))
 
-putprop(Import['Softworks] NewDocViewGUI 'NewDocViewGUI)
+putprop(VrtImport['Softworks] NewDocViewGUI 'NewDocViewGUI)
 
 )
 
 ; Export these as global functions since the library manager init 
 ;  file does not seem to support SKILL++ or the InScheme() function
-SdmCombinedGUI = Import['Softworks]->NewDocViewGUI->CombinedGUI
+SdmCombinedGUI = VrtImport['Softworks]->NewDocViewGUI->CombinedGUI

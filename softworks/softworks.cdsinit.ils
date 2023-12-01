@@ -13,8 +13,8 @@ let((dir_path src_path packages)
 		"html/SdmHtml.ils"
 		;"code_workspace.il" ; Create Code Workspace
 	)
-	Import['Module]->LoadList(packages
-		?root_path Import['Virtue]->GetCurrentFileDirectory())
+	VrtImport['Module]->LoadList(packages
+		?root_path VrtImport['Virtue]->GetCurrentFileDirectory())
 )
 
 printf("  Softworks Initialized\n")

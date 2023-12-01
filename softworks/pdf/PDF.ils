@@ -1,7 +1,7 @@
 
 printf("  Loading PDF support...")
 let((PDF
-	(Softworks Import['Softworks]))
+	(Softworks VrtImport['Softworks]))
 	
 PDF = let((
 	(viewSetup '(
@@ -63,6 +63,6 @@ PDF->init()
 )
 
 ;Global functions
-SdmPdfDataTrigger = Import['Softworks]->PDF->DataTrigger
+SdmPdfDataTrigger = VrtImport['Softworks]->PDF->DataTrigger
 
 printf("done\n")

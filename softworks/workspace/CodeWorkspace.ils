@@ -1,6 +1,6 @@
 let((CodeWorkspace)
 
-CodeWorkspace = let(((Path Import['Path]))
+CodeWorkspace = let(((Path VrtImport['Path]))
 
 procedure(workspace_directory()
 	cond(

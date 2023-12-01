@@ -63,12 +63,12 @@ list(nil
 	'StopLmgrCB StopLmgrCB
 ))
 
-putprop(Import['Softworks] VsCode 'VsCode)
+putprop(VrtImport['Softworks] VsCode 'VsCode)
 
 )
 
 ; Library Manager Menu Callbacks
-SdmVsCodeStartLmgrCB = Import['Softworks]->VsCode->StartLmgrCB
+SdmVsCodeStartLmgrCB = VrtImport['Softworks]->VsCode->StartLmgrCB
 
 printf("done\n")
 

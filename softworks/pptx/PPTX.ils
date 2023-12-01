@@ -2,7 +2,7 @@ printf("  Loading PPTX support...")
 
 let((PPTX
 	   (module_description "Adds a PowerPoint (*.pptx) view type to Virtuoso")
-	   (Softworks Import['Softworks]))
+	   (Softworks VrtImport['Softworks]))
 
 PPTX = let((
 	(viewSetup '(
@@ -67,6 +67,6 @@ PPTX->init()
 )
 
 ;Global functions
-SdmPPTXDataTrigger = Import['Softworks]->PPTX->DataTrigger
+SdmPPTXDataTrigger = VrtImport['Softworks]->PPTX->DataTrigger
 
 printf("done\n")

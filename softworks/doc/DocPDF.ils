@@ -1,7 +1,7 @@
 printf("  Loading PDF support...")
 
 let(((module_description "Adds a PDF (*.pdf) view type to Virtuoso")
-	 (Softworks Import['Softworks]))
+	 (Softworks VrtImport['Softworks]))
 
 DocPDF = let((
 	(viewSetup '(
@@ -45,11 +45,11 @@ list(nil
 	'DataTrigger DataTrigger
 ))
 
-Import['Module]->New('DocPDF DocPDF
+VrtImport['Module]->New('DocPDF DocPDF
              ?package Softworks
              ?description module_description)
 
 )
 
 ;Global functions
-DocXpdfDataTrigger = Import['DocPDF]->DataTrigger
+DocXpdfDataTrigger = VrtImport['DocPDF]->DataTrigger
