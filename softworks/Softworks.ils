@@ -74,8 +74,6 @@ list(nil
 Softworks = VrtImport['Module]->New('Softworks 
               ?module Softworks
               ?description module_description)
-
-VrtImport['Package]->New(Softworks VrtImport['Virtue]->GetCurrentFileDirectory())
 )
 ; Global Functions
 SdmIdleTrigger = VrtImport['Softworks]->IdleTrigger
