@@ -1,0 +1,28 @@
+# https://taskfile.dev/
+version: '3'
+tasks:
+  default:
+    cmds:
+      - task --list-all
+  build:
+    cmds:
+      - exec ./scripts/build.sh
+  release:
+    cmds:
+      - exec ./scripts/release.sh
+  docs:
+    cmds:
+      - cd docs; ./autobuild.sh
+  clean:
+    cmds:
+      - rm -rf dist
+
+  install-dev:
+    cmds:
+      - mamba env create -f environment.yml
+      - conda activate ids-dev
+      - pip install --no-deps -e .
+
+  release-docs:
+    cmds:
+      - cd docs; make html
