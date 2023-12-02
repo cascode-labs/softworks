@@ -1,0 +1,26 @@
+let((Firefox
+  (module_description "firefox web browser")
+  (Module VrtImport['Module])
+  (Softworks VrtImport['Softworks])
+  )
+
+Firefox=let(()
+  procedure(open(@optional (filepath "") "s")
+    "Launches the Firefox browser and opens filepath if specified"
+    let(((cmd "firefox"))
+    unless(Str->emptyp(filepath)
+      cmd = strcat(cmd " " filePath))
+    system(cmd)
+  ))
+
+  list(nil
+    'name "Firefox"
+    'open open  
+))
+
+Firefox = Module->New('Firefox 
+              ?module Firefox
+              ?package Softworks
+              ?description module_description)
+Module->AddItem(Softworks 'Firefox Firefox)
+)

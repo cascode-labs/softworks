@@ -1,0 +1,38 @@
+printf("  Loading HTML support...")
+
+let((HTML
+	   (module_description "Adds an HTML (*.html) view type to Virtuoso")
+	   (Softworks VrtImport['Softworks]))
+
+HTML = letseq((
+	(viewType "html")
+	(viewSetup '(
+		;(viewType  appName dataTrigger parentType)
+		(viewType "firefox" "SdmHTMLDataTrigger" nil) 
+	 )
+	))
+ 
+procedure(init()
+	"Register HTML Cellview Types"
+	Softworks->initDeRegApp(viewSetup)
+)
+
+; uninitialize all Python views so they can be redefined
+procedure(uninit()
+	Softworks->uninitDeRegApp(viewSetup)
+)
+
+list(nil
+	'init init
+	'uninit uninit
+))
+
+putprop(Softworks HTML 'HTML)
+HTML->init()
+
+)
+
+;Global functions
+SdmHTMLDataTrigger = VrtImport['Firefox]->DataTrigger
+
+printf("done\n")

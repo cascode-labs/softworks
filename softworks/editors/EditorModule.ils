@@ -1,0 +1,63 @@
+let((EditorModule
+	(module_description "Editor modules are modules with a 'name property and an'open function.  They also include a default DataTrigger.")
+  (Project VrtImport['IDS]->Project)
+	(Path VrtImport['Path])
+	(Module VrtImport['Module])
+	(Str VrtImport['Str])
+  (Softworks VrtImport['Softworks])
+  )
+
+EditorModule =let(()
+
+procedure(New(module_symbol
+  "Registers a new editor module and adds a DataTrigger function to it."
+  @key module package (description "") "sggt")
+
+  module = Module->New(module_symbol
+  ?module module
+  ?package package
+  ?description description)
+
+  Module->AddItem(module 'DataTrigger 
+                  lambda( (argList) DataTrigger(module argList)))
+  module
+)
+
+; Open an HTML view with the function specified by startReader
+;  startReader should start the editor with no arguments specified.
+;  startReader should open any number of views when specified as additional arguments.
+procedure(DataTrigger(module @optional argList)
+    "Open a view using the open method of the specified editor module.  
+     If the view can't be opened, then the new view gui is shown."
+	let((file fileName objId
+	    (libName  argList->libName)
+	    (cellName argList->cellName)
+      (viewName argList->viewName)
+      (rootType argList->rootType)
+	    (appName  argList->appName)
+	    (viewFileName argList->viewFileId->name)
+    )
+
+    if( objId = ddGetObj(libName cellName viewName viewFileName nil "r") then
+    	file = ddGetObjWritePath(objId)
+      if(isFile(file) then
+        module->open(file)
+      else
+        warn("Warning, couldn't open %s / %s / %s as a HTML view", libName cellName viewName))
+    else
+      SdmCombinedGUI(libName cellName viewName )
+    )
+	t
+))
+
+list(nil
+  'New New
+	'DataTrigger lambda(DataTrigger
+))
+
+EditorModule = Module->New('EditorModule 
+  ?module EditorModule
+  ?package Softworks
+  ?description module_description)
+Module->AddItem(Softworks 'EditorModule EditorModule)
+)
