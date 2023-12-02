@@ -1,24 +1,21 @@
 printf("  Loading VScode support...")
-let((VsCode)
+let((VsCode
+     (Project VrtImport['IDS]->Project)
+     (Path VrtImport['Path]))
 
 VsCode =let(()
 
-; Start a new VS Code Session
-procedure(start() let((workspace_prefix cmd)
-	if(getShellEnvVar("SOFTWORKS_WORKSPACE_PATH") then
-		workspace_path = getShellEnvVar("SOFTWORKS_WORKSPACE_PATH")
-	else
-		workspace_prefix = strcat(pwd() "/code_workspace") 
-	)
-	workspace_prefix
-  prj = SkyPrj->newFromEnv()
-	cmd = sprintf(nil "exec code %s; exit" strcat(prj->PrjPath->Path "/work_libs/" prj->User "/" prj->Name "_code")) 
+procedure(start() 
+  "Start a new VS Code Session"
+  let((workspace_path cmd)
+  workspace_path = setup_workspace()
+	cmd = sprintf(nil "exec code %s; exit" workspace_path)
 	printf("Starting VScode\n")
 	printf("VScode: %s\n" cmd)
 	VScodeProcess = ipcBeginProcess(cmd "" 
 		outputCallback 
 		errorCallback)
-	printf("VScode: %A\n" VScodeProcess)
+	printf("VScode process started: %A\n" VScodeProcess)
 ))
 
 ; Open a file in VScode
@@ -37,7 +34,7 @@ procedure(outputCallback(o_childId t_data)
 	if(t_data == sprintf(nil "VScode exited\n") then
 		stop()
 	else
-		printf("VScode: %s" t_data))
+		printf("VS Code: %s" t_data))
 )
 
 ; Callback for VScode stderr
@@ -46,9 +43,26 @@ procedure(errorCallback(o_childId t_data)
 
 ; Called when VScode exits
 procedure(exitCallback(o_childId x_exitStatus)
-	printf("VScode Exited")
+	printf("VS Code Exited")
 	VScodeProcess = nil
 )
+
+procedure(setup_workspace()
+  "Returns the project's VS Code workspace and creates the directory if it doesn't already exist."
+  let((workspace_path)
+  if(getShellEnvVar("SOFTWORKS_WORKSPACE_PATH") then
+		workspace_path = getShellEnvVar("SOFTWORKS_WORKSPACE_PATH")
+	else
+    workspace_path = Path->Cat(
+      Project->Path() 
+      "work_libs" 
+      getLogin()
+      strcat(Project->Name() "_code"))
+	)
+  unless(isReadable(workspace_path)
+    createDirHier(workspace_path))
+  workspace_path
+))
 
 procedure(StartLmgrCB(_MenuName _Lib _Cell _View _a _b)
 	start())
