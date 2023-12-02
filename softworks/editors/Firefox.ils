@@ -18,7 +18,7 @@ Firefox=let(()
     'open open  
 ))
 
-Firefox = Module->New('Firefox 
+Firefox = Softworks->EditorModule->New('Firefox 
               ?module Firefox
               ?package Softworks
               ?description module_description)

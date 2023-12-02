@@ -2,9 +2,11 @@ printf("Initializing Softworks\n")
 let((dir_path src_path packages)
 	packages = '(
 		"Softworks.ils"
+		"editors/VsCode.ils"
+		"editors/Firefox.ils"
+		"editors/LibreOffice.ils"
 		"workspace/CodeWorkspace.ils"
 		"NewDocViewGUI.ils"
-		"python/VsCode.ils"
 		"python/Python.ils"
 		"skill/Skill.ils"
 		"pdf/PDF.ils"
