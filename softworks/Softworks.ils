@@ -1,7 +1,7 @@
 printf("  Loading Softworks core...")
 
 let((Softworks
-		 (module_description "Software and documentation view types in the Cadence Virtuoso IC design environment"))
+  (module_description "Software and documentation view types in the Cadence Virtuoso IC design environment"))
 
 Softworks = let(()
 
@@ -73,6 +73,7 @@ list(nil
 
 Softworks = VrtImport['Module]->New('Softworks 
               ?module Softworks
+              ?package Softworks
               ?description module_description)
 )
 ; Global Functions
