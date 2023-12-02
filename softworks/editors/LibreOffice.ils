@@ -1,0 +1,22 @@
+let((LibreOffice
+  (module_description "Libre Office Document Editor")
+  (Module VrtImport['Module])
+  (Softworks VrtImport['Softworks]))
+
+LibreOffice=let(()
+  procedure(open(filepath "s")
+    "Open filepath in the libre office document editor"
+    system(strcat( "firefox " filePath))
+  )
+
+  list(nil
+    'name "Libre Office"
+    'open open
+))
+
+LibreOffice = Module->New('LibreOffice 
+           ?module LibreOffice
+           ?package Softworks
+           ?description module_description)
+Softworks->EditorModule->AddItem(Softworks 'LibreOffice LibreOffice)
+)
