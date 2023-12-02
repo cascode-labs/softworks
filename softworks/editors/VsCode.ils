@@ -1,0 +1,95 @@
+printf("  Loading VS Code support...")
+let((VsCode
+	(module_description "Visual Studio Code")
+  (Project VrtImport['IDS]->Project)
+	(Path VrtImport['Path])
+	(Module VrtImport['Module])
+	(Str VrtImport['Str])
+  (Softworks VrtImport['Softworks])
+  )
+
+VsCode =let((VsCodeProcess )
+
+procedure(open(@optional (filePath "") "t")
+  "Start VS Code and open the filePath if specified"
+  let((cmd process
+       (workspace_path setup_workspace())
+      )
+	print_message(strcat("Opening %s" filePath " in " workspace_path " workspace"))
+	
+	cmd = strcat("exec code --add "  workspace_path)
+	unless(Str->emptyp(filePath)
+    cmd = strcat(cmd " " filePath))
+  cmd = strcat(cmd "; exit")
+	print_message(cmd)
+
+	process = ipcBeginProcess(cmd "" 
+		outputCallback 
+		errorCallback)
+  unless(isActive()
+    VsCodeProcess = process)
+))
+
+procedure(outputCallback(o_childId t_data)
+  "Echo all of the stdout from VS Code in the CIW"
+	if(t_data == sprintf(nil "VScode exited\n") then
+		stop()
+	else
+		print_message(t_data))
+)
+
+procedure(errorCallback(o_childId t_data)
+"Echo all of the stderr from VS Code in the CIW as a warning"
+	warn("VS Code: %s" t_data))
+
+procedure(exitCallback(o_childId x_exitStatus)
+  "Called when VS Code exits"
+	print_message("VS Code Exited")
+	VsCodeProcess = nil
+)
+
+procedure(setup_workspace()
+  "Returns the project's VS Code workspace and creates the directory if it doesn't already exist."
+  let((workspace_path)
+  if(getShellEnvVar("SOFTWORKS_WORKSPACE_PATH") then
+		workspace_path = getShellEnvVar("SOFTWORKS_WORKSPACE_PATH")
+	else
+    workspace_path = Path->Cat(
+      Project->Path() 
+      "work_libs" 
+      getLogin()
+      strcat(Project->Name() "_code"))
+	)
+  unless(isReadable(workspace_path)
+    createDirHier(workspace_path))
+  workspace_path
+))
+
+procedure(StartLmgrCB(_MenuName _Lib _Cell _View _a _b)
+	open())
+
+procedure(print_message(message "t")
+	printf("VS Code: %s\n" message)
+)
+
+procedure(isActive()
+  when(VsCodeProcess
+    ipcIsActiveProcess(VsCodeProcess))
+)
+
+list(nil
+	'open open
+	'StartLmgrCB StartLmgrCB
+))
+
+VsCode = Module->New('VsCode 
+  ?module VsCode
+  ?package Softworks
+  ?description module_description)
+Module->AddItem(Softworks 'VsCode VsCode)
+)
+
+; Library Manager Menu Callbacks
+SdmVsCodeStartLmgrCB = VrtImport['Softworks]->VsCode->StartLmgrCB
+
+printf("done\n")
